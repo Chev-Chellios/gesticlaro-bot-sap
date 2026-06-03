@@ -11,20 +11,46 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = FastAPI()
 
-# La URL del Webhook se mantiene fija para saber a dónde devolver los datos
-URL_WEBHOOK_BASE44 = os.getenv("URL_WEBHOOK_BASE44", "https://base44.com")
+# CONFIGURACIÓN DE SUPABASE (Se cargará de forma segura desde Render)
+SUPABASE_URL = os.getenv("SUPABASE_URL", "tu_url_de_supabase")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "tu_api_key_de_supabase")
+SUPABASE_TABLE = "inventario_sap"
 
 COLUMNAS_SAP = ["Material", "Serial", "Texto", "Centro", "Almacen", "Movimiento", "Mov_texto", "Modelo", "Origen", "Precio", "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"]
 COLUMNAS_RELEVANTES = {"Material", "Serial", "Texto", "Centro", "Precio", "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"}
 
-# ==========================================
-# MODIFICACIÓN 1: El molde del paquete JSON
-# ==========================================
 class ConsultaRequest(BaseModel):
     rango_inicio: str
     rango_fin: str
-    usuario_sap: str    # <-- Ahora Base44 debe enviar esto
-    password_sap: str   # <-- Ahora Base44 debe enviar esto
+    usuario_sap: str
+    password_sap: str
+
+def limpiar_supabase_viejo():
+    """Borra todos los registros actuales de la tabla en Supabase"""
+    url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}"
+    headers = {
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "apikey": SUPABASE_KEY
+    }
+    # En Supabase, pasar el parámetro 'id=neq.0' selecciona todos los registros
+    requests.delete(url, headers=headers, params={"id": "neq.0"})
+
+def subir_a_supabase(registros, categoria):
+    """Sube los registros estructurados directamente a Supabase"""
+    url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}"
+    headers = {
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "apikey": SUPABASE_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+    }
+    
+    # Inyectar la categoría correspondiente a cada registro
+    for reg in registros:
+        reg["Categoria"] = categoria
+        
+    # Supabase permite subir miles de registros juntos en un solo array JSON
+    requests.post(url, headers=headers, json=registros)
 
 def extraer_datos_tabla(driver):
     xpath_tabla = "//table[contains(@class, 'sapUiTableCtrl')]//tbody | //table[contains(@class, 'sapMListTbl')]//tbody"
@@ -43,9 +69,6 @@ def extraer_datos_tabla(driver):
     except:
         return []
 
-# ==========================================
-# MODIFICACIÓN 2: Uso de datos dinámicos
-# ==========================================
 def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_sap: str):
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
@@ -60,13 +83,11 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_
     try:
         driver.get("https://ondemand.com")
 
-        # Login usando las variables que viajan desde Base44
+        # Login
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span'))).click()
         campo_usuario = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="j_username"]')))
-        
-        campo_usuario.send_keys(usuario_sap)  # <-- Cambiado
-        driver.find_element(By.XPATH, '//*[@id="j_password"]').send_keys(password_sap)  # <-- Cambiado
-        
+        campo_usuario.send_keys(usuario_sap)
+        driver.find_element(By.XPATH, '//*[@id="j_password"]').send_keys(password_sap)
         driver.find_element(By.ID, "logOnFormSubmit").click()
 
         # Navegación
@@ -103,24 +124,25 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_
         time.sleep(12)
         registros_transito = extraer_datos_tabla(driver)
 
-        # Envío de vuelta a Base44
-        payload = {
-            "metadata": {"rango": f"{rango_inicio}-{rango_fin}"},
-            "stock_actual": registros_stock_actual,
-            "stock_en_transito": registros_transito
-        }
-        requests.post(URL_WEBHOOK_BASE44, json=payload, timeout=40)
+        # --- ENVÍO DIRECTO A SUPABASE ---
+        print("Limpiando registros antiguos de Supabase...")
+        limpiar_supabase_viejo()
+        
+        print("Subiendo nuevo Stock Actual...")
+        if registros_stock_actual:
+            subir_a_supabase(registros_stock_actual, "Stock actual")
+            
+        print("Subiendo nuevo Stock en Tránsito...")
+        if registros_transito:
+            subir_a_supabase(registros_transito, "Stock en Tránsito")
+        print("¡Sincronización con Supabase completada con éxito!")
 
     except Exception as e:
         print(f"Error en segundo plano: {e}")
     finally:
         driver.quit()
 
-# ==========================================
-# MODIFICACIÓN 3: Pasar parámetros a la tarea
-# ==========================================
 @app.post("/ejecutar-bot")
 def ejecutar_bot(datos: ConsultaRequest, background_tasks: BackgroundTasks):
-    # Despacha las credenciales y rangos hacia el bot en segundo plano
     background_tasks.add_task(tarea_bot_sap, datos.rango_inicio, datos.rango_fin, datos.usuario_sap, datos.password_sap)
     return {"status": "Proceso de actualización iniciado en la nube"}
