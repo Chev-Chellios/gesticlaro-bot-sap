@@ -47,7 +47,7 @@ def subir_a_supabase(registros, categoria):
     
     # Inyectar la categoría correspondiente a cada registro
     for reg in registros:
-        reg["Categoria"] = categoria
+        reg["Categoria"] = Categoria
         
     # Supabase permite subir miles de registros juntos en un solo array JSON
     requests.post(url, headers=headers, json=registros)
