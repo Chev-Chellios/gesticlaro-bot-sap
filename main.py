@@ -180,3 +180,11 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_
 def ejecutar_bot(datos: ConsultaRequest):
     tarea_bot_sap(datos.rango_inicio, datos.rango_fin, datos.usuario_sap, datos.password_sap)
     return {"status": "Proceso ejecutado"}
+from fastapi.responses import FileResponse
+
+@app.get("/ver-error")
+def ver_error():
+    # Nos permite ver la foto del error escribiendo /ver-error al final de tu URL de Render
+    if os.path.exists("error_sap.png"):
+        return FileResponse("error_sap.png")
+    return {"status": "No hay capturas de error guardadas por el momento."}
