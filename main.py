@@ -2,6 +2,7 @@ import os
 import time
 import requests
 from fastapi import FastAPI, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware  # <-- NUEVA LÍNEA
 from pydantic import BaseModel
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -11,7 +12,16 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = FastAPI()
 
-# CONFIGURACIÓN DE SUPABASE (Se carga desde el entorno seguro de Render)
+# NUEVO BLOQUE: Habilitar permisos CORS universales para que Base44 hable con Render
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# CONFIGURACIÓN DE SUPABASE (Se mantiene igual abajo...)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "tu_url_de_supabase")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "tu_api_key_de_supabase")
 SUPABASE_TABLE = "inventario_sap"
