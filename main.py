@@ -166,10 +166,16 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_
     except Exception as e:
         import traceback
         print("¡Se detectó un fallo crítico en la navegación de SAP!")
+        try:
+            print(f"URL exacta donde se trabó el bot: {driver.current_url}")
+            # Toma una foto de la pantalla actual y la guarda en el servidor
+            driver.save_screenshot("error_sap.png")
+            print("Captura de pantalla guardada como 'error_sap.png' en el servidor.")
+        except:
+            print("No se pudo tomar la captura de pantalla.")
         traceback.print_exc()
     finally:
         driver.quit()
-
 @app.post("/ejecutar-bot")
 def ejecutar_bot(datos: ConsultaRequest):
     tarea_bot_sap(datos.rango_inicio, datos.rango_fin, datos.usuario_sap, datos.password_sap)
