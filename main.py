@@ -69,7 +69,7 @@ def extraer_datos_tabla(driver):
     except:
         return []
 
-def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_sap: str):
+def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
