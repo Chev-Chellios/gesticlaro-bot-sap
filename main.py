@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = FastAPI()
 
-# CONFIGURACIÓN DE SUPABASE (Se cargará de forma segura desde Render)
+# CONFIGURACIÓN DE SUPABASE (Se carga desde el entorno seguro de Render)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "tu_url_de_supabase")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "tu_api_key_de_supabase")
 SUPABASE_TABLE = "inventario_sap"
@@ -32,7 +32,6 @@ def limpiar_supabase_viejo():
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "apikey": SUPABASE_KEY
     }
-    # En Supabase, pasar el parámetro 'id=neq.0' selecciona todos los registros
     requests.delete(url, headers=headers, params={"id": "neq.0"})
 
 def subir_a_supabase(registros, categoria):
@@ -45,11 +44,10 @@ def subir_a_supabase(registros, categoria):
         "Prefer": "return=minimal"
     }
     
-    # Inyectar la categoría correspondiente a cada registro
+    # Aseguramos el nombre exacto de la columna en Supabase (toda en minúsculas)
     for reg in registros:
-        reg["Categoria"] = Categoria
+        reg["Categoria"] = categoria
         
-    # Supabase permite subir miles de registros juntos en un solo array JSON
     requests.post(url, headers=headers, json=registros)
 
 def extraer_datos_tabla(driver):
@@ -59,9 +57,11 @@ def extraer_datos_tabla(driver):
         filas = tabla_body.find_elements(By.TAG_NAME, "tr")
         resultados = []
         for fila in filas:
-            celdas = fila.find_elements(By.TAG_NAME, "td")
-            if celdas:
-                valores = [celda.text.strip() for celda in celdas]
+            celdas = fila.find_elements(By.TAG_NAME, "tr" if "sapUiTableCtrl" in xpath_tabla else "td")
+            # Si SAP usa celdas estándar td o divs internos, extraemos su texto
+            celdas_datos = fila.find_elements(By.TAG_NAME, "td") if not celdas else celdas
+            if celdas_datos:
+                valores = [celda.text.strip() for celda in celdas_datos]
                 if len(valores) >= len(COLUMNAS_SAP):
                     registro = {COLUMNAS_SAP[i]: valores[i] for i in range(len(COLUMNAS_SAP)) if COLUMNAS_SAP[i] in COLUMNAS_RELEVANTES}
                     resultados.append(registro)
@@ -81,7 +81,8 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_
     registros_transito = []
 
     try:
-        driver.get("https://ondemand.com")
+        # URL REAL Y COMPLETA CORREGIDA DE SAP CLARO AGENTES
+        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display")
 
         # Login
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span'))).click()
@@ -124,7 +125,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_sap: str, password_
         time.sleep(12)
         registros_transito = extraer_datos_tabla(driver)
 
-        # --- ENVÍO DIRECTO A SUPABASE ---
+        # --- ENVÍO DE DATOS A SUPABASE ---
         print("Limpiando registros antiguos de Supabase...")
         limpiar_supabase_viejo()
         
