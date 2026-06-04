@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = FastAPI()
 
-# Permisos CORS para comunicación abierta con Base44
+# Permisos CORS para comunicación con Base44
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# CONFIGURACIÓN DE SUPABASE (Se carga desde el entorno seguro de Render)
+# CONFIGURACIÓN DE SUPABASE (Se carga desde el entorno de Render)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "tu_url_de_supabase")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "tu_api_key_de_supabase")
 SUPABASE_TABLE = "inventario_sap"
@@ -29,11 +29,12 @@ SUPABASE_TABLE = "inventario_sap"
 COLUMNAS_SAP = ["Material", "Serial", "Texto", "Centro", "Almacen", "Movimiento", "Mov_texto", "Modelo", "Origen", "Precio", "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"]
 COLUMNAS_RELEVANTES = {"Material", "Serial", "Texto", "Centro", "Precio", "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"}
 
+# Sincronizado con los nombres de variables que usas en Base44
 class ConsultaRequest(BaseModel):
     rango_inicio: str
     rango_fin: str
-    usuario_sap: str
-    password_sap: str
+    SinUs: str       # <-- Actualizado según tu sistema
+    SinPass: str     # <-- Actualizado según tu sistema
 
 def limpiar_supabase_viejo():
     url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}"
@@ -82,73 +83,53 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
 
     try:
         print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display")
-        time.sleep(5) # Pausa estratégica para carga internacional de red
+        driver.get("https://ondemand.com")
+        time.sleep(5)
 
-        print("Paso 0: Verificando si requiere desplegar login corporativo...")
+        print("Paso 0: Verificando presencia del botón superior...")
         try:
-            boton_desplegar = WebDriverWait(driver, 5).until(
+            # Forzamos la búsqueda usando Javascript y Xpath para ver si está el botón
+            boton_superior = WebDriverWait(driver, 5).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span'))
             )
-            boton_desplegar.click()
-            print("-> Botón superior encontrado y presionado.")
-            time.sleep(3)
+            driver.execute_script("arguments[0].click();", boton_superior)
+            print("-> Botón superior presionado mediante JS con éxito.")
+            time.sleep(4)
         except:
-            print("-> El botón superior no está visible. Buscando formulario directamente...")
-
-        # --- ESCUDO CONTRA IFRAMES EN EL LOGIN ---
-        print("Buscando si el formulario está dentro de un iframe...")
-        iframes = driver.find_elements(By.TAG_NAME, "iframe")
-        if len(iframes) > 0:
-            print(f"-> Se detectaron {len(iframes)} iframes. Saltando al iframe del formulario...")
-            driver.switch_to.frame(0) # Se mete al primer iframe disponible
+            print("-> El botón superior no respondió o ya estamos en el login. Continuando...")
 
         print("Paso 1: Escribiendo credenciales e ingresando...")
+        # Espera estricta a que el formulario esté listo en pantalla
         campo_usuario = WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="j_username"]'))
+            EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]'))
         )
-        campo_usuario.clear()
-        campo_usuario.send_keys(SinUs)
         
-        campo_password = driver.find_element(By.XPATH, '//*[@id="j_password"]')
-        campo_password.clear()
-        campo_password.send_keys(SinPass)
-        
-        driver.find_element(By.ID, "logOnFormSubmit").click()
-        print("-> Credenciales enviadas con éxito.")
-        
-        # Volver al contenido principal de la página tras loguearse
-        driver.switch_to.default_content()
+        # Inyección directa por JavaScript para evitar bloqueos de foco o idioma
+        driver.execute_script("document.getElementById('j_username').value = arguments[0];", SinUs)
+        driver.execute_script("document.getElementById('j_password').value = arguments[0];", SinPass)
+        time.sleep(1)
+
+        print("-> Presionando botón de ingreso 'Log On'...")
+        boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
+        driver.execute_script("arguments[0].click();", boton_submit)
+        print("-> Formulario enviado.")
         time.sleep(8)
 
         print("Paso 2: Navegando por el menú de aplicaciones...")
-        # Damos una pausa estratégica de 6 segundos para que el Home de SAP se pinte por completo
-        time.sleep(6) 
-
-        print("-> Buscando y presionando el botón de Aplicaciones...")
         boton_apps = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(@id, 'btnApplicaciones')]"))
         )
         driver.execute_script("arguments[0].click();", boton_apps)
         time.sleep(3)
 
-        print("-> Buscando e ingresando al módulo de consultas...")
-        # Intentamos hacer clic en el azulejo usando tu XPath, pero de forma forzada por JS
-        try:
-            tile_modulo = WebDriverWait(driver, 15).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
-            )
-            driver.execute_script("arguments[0].click();", tile_modulo)
-        except:
-            print("-> El ID rígido falló. Intentando buscar el módulo por su clase genérica de SAP...")
-            # Si el ID cambia, busca cualquier azulejo/tile activo en la pantalla y le hace clic
-            tile_generico = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, "sapFioriObjectPageHeaderTitle"))
-            )
-            driver.execute_script("arguments[0].click();", tile_generico)
-            
-        print("-> Ingreso al módulo completado con éxito.")
+        tile_modulo = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
+        )
+        driver.execute_script("arguments[0].click();", tile_modulo)
         time.sleep(5)
+
+        xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
+        xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
 
         print("Paso 3: Consultando Stock Disponible Principal...")
         campo_inicio = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview8--input0"]')))
@@ -190,23 +171,21 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         print("¡Se detectó un fallo crítico en la navegación de SAP!")
         try:
             print(f"URL exacta donde se trabó el bot: {driver.current_url}")
-            # Toma una foto de la pantalla actual y la guarda en el servidor
             driver.save_screenshot("error_sap.png")
-            print("Captura de pantalla guardada como 'error_sap.png' en el servidor.")
+            print("Captura de pantalla guardada como 'error_sap.png'.")
         except:
-            print("No se pudo tomar la captura de pantalla.")
+            pass
         traceback.print_exc()
     finally:
         driver.quit()
-@app.post("/ejecutar-bot")
-def ejecutar_bot(datos: ConsultaRequest):
-    tarea_bot_sap(datos.rango_inicio, datos.rango_fin, datos.usuario_sap, datos.password_sap)
-    return {"status": "Proceso ejecutado"}
-from fastapi.responses import FileResponse
 
 @app.get("/ver-error")
 def ver_error():
-    # Nos permite ver la foto del error escribiendo /ver-error al final de tu URL de Render
     if os.path.exists("error_sap.png"):
         return FileResponse("error_sap.png")
     return {"status": "No hay capturas de error guardadas por el momento."}
+
+@app.post("/ejecutar-bot")
+def ejecutar_bot(datos: ConsultaRequest):
+    tarea_bot_sap(datos.rango_inicio, datos.rango_fin, datos.SinUs, datos.SinPass)
+    return {"status": "Proceso ejecutado"}
