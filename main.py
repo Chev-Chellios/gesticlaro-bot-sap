@@ -3,7 +3,6 @@ import time
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -12,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 app = FastAPI()
 
-# Permisos CORS para comunicación con Base44
+# Permisos CORS para comunicación abierta con Base44
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -28,13 +27,6 @@ SUPABASE_TABLE = "inventario_sap"
 
 COLUMNAS_SAP = ["Material", "Serial", "Texto", "Centro", "Almacen", "Movimiento", "Mov_texto", "Modelo", "Origen", "Precio", "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"]
 COLUMNAS_RELEVANTES = {"Material", "Serial", "Texto", "Centro", "Precio", "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"}
-
-# Sincronizado con los nombres de variables que usas en Base44
-class ConsultaRequest(BaseModel):
-    rango_inicio: str
-    rango_fin: str
-    SinUs: str       # <-- Actualizado según tu sistema
-    SinPass: str     # <-- Actualizado según tu sistema
 
 def limpiar_supabase_viejo():
     url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}"
@@ -70,7 +62,7 @@ def extraer_datos_tabla(driver):
     except:
         return []
 
-def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
+def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario: str, password: str):
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
@@ -83,35 +75,33 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
 
     try:
         print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display")
+        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#Home-show")
         time.sleep(5)
 
         print("Paso 0: Verificando presencia del botón superior...")
         try:
-            # Forzamos la búsqueda usando Javascript y Xpath para ver si está el botón
             boton_superior = WebDriverWait(driver, 5).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span'))
             )
-            driver.execute_script("arguments[0].click();", boton_superior)
-            print("-> Botón superior presionado mediante JS con éxito.")
+            driver.execute_script("arguments.click();", boton_superior)
+            print("-> Botón superior presionado con éxito.")
             time.sleep(4)
         except:
-            print("-> El botón superior no respondió o ya estamos en el login. Continuando...")
+            print("-> El botón superior no está visible. Continuando al formulario...")
 
         print("Paso 1: Escribiendo credenciales e ingresando...")
-        # Espera estricta a que el formulario esté listo en pantalla
         campo_usuario = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]'))
         )
         
-        # Inyección directa por JavaScript para evitar bloqueos de foco o idioma
-        driver.execute_script("document.getElementById('j_username').value = arguments[0];", SinUs)
-        driver.execute_script("document.getElementById('j_password').value = arguments[0];", SinPass)
+        # Inyección directa por JavaScript (Inmune a problemas de foco)
+        driver.execute_script("document.getElementById('j_username').value = arguments;", usuario)
+        driver.execute_script("document.getElementById('j_password').value = arguments;", password)
         time.sleep(1)
 
         print("-> Presionando botón de ingreso 'Log On'...")
         boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
-        driver.execute_script("arguments[0].click();", boton_submit)
+        driver.execute_script("arguments.click();", boton_submit)
         print("-> Formulario enviado.")
         time.sleep(8)
 
@@ -119,13 +109,13 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         boton_apps = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(@id, 'btnApplicaciones')]"))
         )
-        driver.execute_script("arguments[0].click();", boton_apps)
+        driver.execute_script("arguments.click();", boton_apps)
         time.sleep(3)
 
         tile_modulo = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
         )
-        driver.execute_script("arguments[0].click();", tile_modulo)
+        driver.execute_script("arguments.click();", tile_modulo)
         time.sleep(5)
 
         xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
@@ -181,11 +171,20 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
 
 @app.get("/ver-error")
 def ver_error():
+    from fastapi.responses import FileResponse
     if os.path.exists("error_sap.png"):
         return FileResponse("error_sap.png")
     return {"status": "No hay capturas de error guardadas por el momento."}
 
 @app.post("/ejecutar-bot")
-def ejecutar_bot(datos: ConsultaRequest):
-    tarea_bot_sap(datos.rango_inicio, datos.rango_fin, datos.SinUs, datos.SinPass)
+def ejecutar_bot(payload: dict):
+    # Usamos un diccionario abierto (payload) para aceptar las variables sin importar mayúsculas/minúsculas
+    r_inicio = str(payload.get("rango_inicio", ""))
+    r_fin = str(payload.get("rango_fin", ""))
+    
+    # Busca la combinación exacta que envíe Base44 de forma elástica
+    usuario = str(payload.get("SinUs", payload.get("sinus", payload.get("Sinus", ""))))
+    password = str(payload.get("SinPass", payload.get("sinpass", payload.get("Sinpass", ""))))
+    
+    tarea_bot_sap(r_inicio, r_fin, usuario, password)
     return {"status": "Proceso ejecutado"}
