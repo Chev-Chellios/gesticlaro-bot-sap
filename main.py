@@ -215,8 +215,8 @@ def ver_error():
 def ejecutar_bot(payload: dict):
     r_inicio = str(payload.get("rango_inicio", ""))
     r_fin = str(payload.get("rango_fin", ""))
-    usuario = str(payload.get("SinUs", payload.get("sinus", payload.get("Sinus", ""))))
-    password = str(payload.get("SinPass", payload.get("sinpass", payload.get("Sinpass", ""))))
+    usuario = str(payload.get("SinUs", ""))
+    password = str(payload.get("SinPass", ""))
     
     tarea_bot_sap(r_inicio, r_fin, usuario, password)
     return {"status": "Proceso ejecutado"}
