@@ -75,7 +75,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
 
     try:
         print("Iniciando simulacion del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://ondemand.com")
+        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#Home-show")
         time.sleep(12) 
 
         print("Paso 0: Verificando presencia del boton superior...")
@@ -120,7 +120,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         time.sleep(12)
 
         print("Paso 2: Viajando directo al modulo mediante URL Maestra...")
-        driver.get("https://ondemand.com")
+        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display")
         print("-> Esperando 22 segundos de cortesia extendida para la carga del modulo...")
         time.sleep(22)
 
