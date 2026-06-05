@@ -62,11 +62,10 @@ def extraer_datos_tabla(driver):
     except:
         return []
 
-def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, password_final: str):
-    # DIAGNÓSTICO DE SEGURIDAD EN LOGS
-    print(f"--> [CONSOLA DE CONTROL] El bot intentará loguearse con el usuario recibido: '{usuario_final}'")
-    print(f"--> [CONSOLA DE CONTROL] Longitud de la contraseña recibida: {len(password_final)} caracteres.")
-
+def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
+    # MENSAJES DE DIAGNÓSTICO EN LOGS
+    print(f"--> [CONSOLA] Iniciando bot para usuario: '{SinUs}'")
+    
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
@@ -79,138 +78,85 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
 
     try:
         print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display")
-        
-        print("-> Esperando 12 segundos fijos para que la red cargue por completo el botón...")
+        driver.get("https://ondemand.com")
         time.sleep(12) 
 
-        print("Paso 0: Verificando si requiere desplegar login corporativo...")
+        print("Paso 0: Desplegando formulario de login corporativo...")
         try:
             boton_desplegar = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span | //*[@id="headerLoginButton"]'))
             )
             boton_desplegar.click()
-            print("-> Botón superior encontrado y presionado con éxito mecánico.")
             time.sleep(4)
         except:
-            print("-> El botón superior no respondió. Intentando buscar formulario directamente...")
+            print("-> El botón superior no respondió o ya se auto-redireccionó.")
 
-        print("Buscando si el formulario está dentro de un iframe...")
-        iframes = driver.find_elements(By.TAG_NAME, "iframe")
-        if len(iframes) > 0:
-            print(f"-> Se detectaron {len(iframes)} iframes. Saltando al iframe del formulario...")
+        if len(driver.find_elements(By.TAG_NAME, "iframe")) > 0:
             driver.switch_to.frame(0)
 
         print("Paso 1: Escribiendo credenciales e ingresando...")
         time.sleep(4)
-
-        # Esperamos a que los campos existan físicamente en el código
         WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]')))
         
-        print("-> Ejecutando inyección química directa en memoria de SAP...")
-        # Volvemos al método de inyección de ID puro que no requiere clics en máscaras visuales
-        driver.execute_script(f"document.getElementById('j_username').value = '{usuario_final}';")
-        driver.execute_script(f"document.getElementById('j_password').value = '{password_final}';")
-        time.sleep(5) 
+        driver.execute_script(f"document.getElementById('j_username').value = '{SinUs}';")
+        driver.execute_script(f"document.getElementById('j_password').value = '{SinPass}';")
+        time.sleep(2) 
         
-        print("-> Presionando boton de ingreso 'Log On'...")
-        # Le damos 5 segundos de cortesía para que el formulario valide los textos inyectados
-        time.sleep(5) 
+        boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
+        driver.execute_script("arguments.click();", boton_submit)
+        print("-> Formulario enviado.")
         
-        try:
-            # Opción A: Intentar por el ID estándar esperando que sea clickeable
-            boton_submit = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.ID, "logOnFormSubmit"))
-            )
-            driver.execute_script("arguments[0].click();", boton_submit)
-            print("-> Formulario enviado mediante ID estándar.")
-        except:
-            print("-> ID estándar falló. Intentando buscar por texto visible 'Log On'...")
-            try:
-                # Opción B: Buscar el botón que tenga escrito "Log On" (por el idioma inglés)
-                boton_texto = WebDriverWait(driver, 8).until(
-                    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Log On')] | //input[@value='Log On']"))
-                )
-                driver.execute_script("arguments[0].click();", boton_texto)
-                print("-> Formulario enviado mediante texto 'Log On'.")
-            except:
-                print("-> Búsqueda por texto falló. Aplicando fuerza bruta por clase genérica de SAP...")
-                # Opción C: Buscar por la clase nativa que agrupa los botones en SAP IAS
-                boton_clase = WebDriverWait(driver, 5).until(
-                    EC.element_to_be_clickable((By.CLASS_NAME, "comSapIdpIdpButtons"))
-                )
-                driver.execute_script("arguments[0].click();", boton_clase)
-                print("-> Formulario enviado mediante clase corporativa.")
-
-        print("-> Esperando procesamiento del Login...")
         driver.switch_to.default_content()
-        time.sleep(12) # Damos tiempo amplio para pasar al Home
+        time.sleep(10)
 
         # ==========================================
-        # PASO 2: NAVEGACIÓN EXTENDIDA CON PACIENCIA EXTREMA
+        # PASO 2: ATAJO MAESTRO DIRECTO POR URL
         # ==========================================
-        print("Paso 2: Navegando por el menu de aplicaciones...")
-        # Aumentamos la pausa fija inicial para absorber la lentitud del Home de SAP
-        print("-> Dando 14 segundos fijos para que el Home de SAP procese la red pesada...")
-        time.sleep(14) 
-
-        print("-> Buscando y esperando el boton de Aplicaciones (btnApplicaciones)...")
-        # Extendemos el WebDriverWait a 40 segundos de paciencia para servidores lentos
-        boton_apps = WebDriverWait(driver, 40).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="btnApplicaciones-BDI-content"] | //*[contains(@id, "btnApplicaciones")]'))
-        )
-        print("-> ¡Boton de Aplicaciones detectado visualmente! Forzando click...")
-        driver.execute_script("arguments.click();", boton_apps)
+        print("Paso 2: Saltando directamente al módulo objetivo mediante URL Maestra...")
+        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display")
         
-        # Breve pausa para que se despliegue el panel de los azulejos (Tiles)
-        print("-> Esperando despliegue de azulejos...")
-        time.sleep(5)
+        # Le damos una gran espera fija de 20 segundos para absorber la pesadez de Claro
+        print("-> Esperando 20 segundos de cortesía extendida para la carga del módulo...")
+        time.sleep(20)
+        print("-> Pantalla cargada. Iniciando interacción con el reporte.")
 
-        print("-> Buscando e ingresando al azulejo del modulo de consultas (__tile3-focus)...")
-        try:
-            # Esperamos hasta 30 segundos a que el azulejo específico aparezca
-            tile_modulo = WebDriverWait(driver, 30).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"] | //*[contains(@id, "tile3")]'))
-            )
-            print("-> ¡Azulejo encontrado! Forzando ingreso...")
-            driver.execute_script("arguments.click();", tile_modulo)
-        except Exception as tile_err:
-            print(f"-> Azulejo rigido no disponible ({tile_err}). Buscando por clase generica de SAP...")
-            tile_generico = WebDriverWait(driver, 20).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, "sapFioriObjectPageHeaderTitle"))
-            )
-            driver.execute_script("arguments.click();", tile_generico)
-            
-        print("-> ¡Ingreso al modulo de reportes completado con exito total!")
-        # Damos 8 segundos para que cargue el formulario donde se ponen los rangos de inicio y fin
-        print("-> Esperando que se dibuje el formulario de rangos numéricos...")
-        time.sleep(8)
+        # ==========================================
+        # CONFIGURACIÓN DE SELECTORES DE CONSULTA
+        # ==========================================
+        xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
+        xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
 
         print("Paso 3: Consultando Stock Disponible Principal...")
         campo_inicio = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview8--input0"]')))
         campo_inicio.clear()
         campo_inicio.send_keys(rango_inicio)
-        driver.find_element(By.XPATH, '//*[@id="__xmlview8--input1"]').clear()
-        driver.find_element(By.XPATH, '//*[@id="__xmlview8--input1"]').send_keys(rango_fin)
+        
+        campo_fin = driver.find_element(By.XPATH, '//*[@id="__xmlview8--input1"]')
+        campo_fin.clear()
+        campo_fin.send_keys(rango_fin)
+        
         driver.find_element(By.XPATH, xpath_btn_consultar).click()
-        time.sleep(12)
+        print("-> Consulta 1 enviada. Esperando tabla...")
+        time.sleep(14) # Paciencia extendida para el renderizado del reporte
         registros_stock_actual.extend(extraer_datos_tabla(driver))
 
         print("Paso 4: Reabriendo filtros para Depósito de Reingreso...")
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))).click()
-        time.sleep(1)
+        time.sleep(2)
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview11--rdb5-Button"]'))).click()
         driver.find_element(By.XPATH, xpath_btn_consultar).click()
-        time.sleep(12)
+        print("-> Consulta 2 enviada. Esperando tabla...")
+        time.sleep(14)
         registros_stock_actual.extend(extraer_datos_tabla(driver))
 
         print("Paso 5: Reabriendo filtros para Stock en Tránsito...")
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))).click()
-        time.sleep(1)
+        time.sleep(2)
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb4"]/div/svg/circle'))).click()
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb7-label"]'))).click()
         driver.find_element(By.XPATH, xpath_btn_consultar).click()
-        time.sleep(12)
+        print("-> Consulta 3 enviada. Esperando tabla...")
+        time.sleep(14)
         registros_transito = extraer_datos_tabla(driver)
 
         print("Paso 6: Conectando a Supabase para actualizar datos...")
@@ -219,7 +165,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
             subir_a_supabase(registros_stock_actual, "Stock actual")
         if registros_transito:
             subir_a_supabase(registros_transito, "Stock en Tránsito")
-        print("Sincronización completada de forma exitosa.")
+        print("¡Sincronización masiva con Supabase completada con éxito total!")
 
     except Exception as e:
         import traceback
@@ -244,8 +190,6 @@ def ver_error():
 def ejecutar_bot(payload: dict):
     r_inicio = str(payload.get("rango_inicio", ""))
     r_fin = str(payload.get("rango_fin", ""))
-    
-    # Buscador ultra-flexible de variables (Acepta cualquier combinación de nombres)
     usuario = str(payload.get("SinUs", payload.get("sinus", payload.get("Sinus", payload.get("usuario_sap", ""))))).strip()
     password = str(payload.get("SinPass", payload.get("sinpass", payload.get("Sinpass", payload.get("password_sap", ""))))).strip()
     
