@@ -62,7 +62,11 @@ def extraer_datos_tabla(driver):
     except:
         return []
 
-def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
+def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, password_final: str):
+    # DIAGNÓSTICO DE SEGURIDAD EN LOGS
+    print(f"--> [CONSOLA DE CONTROL] El bot intentará loguearse con el usuario recibido: '{usuario_final}'")
+    print(f"--> [CONSOLA DE CONTROL] Longitud de la contraseña recibida: {len(password_final)} caracteres.")
+
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
@@ -75,7 +79,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
 
     try:
         print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display")
+        driver.get("https://ondemand.com")
         
         print("-> Esperando 12 segundos fijos para que la red cargue por completo el botón...")
         time.sleep(12) 
@@ -97,34 +101,26 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
             print(f"-> Se detectaron {len(iframes)} iframes. Saltando al iframe del formulario...")
             driver.switch_to.frame(0)
 
-        # ==========================================
-        # CÓDIGO DEL PASO 1 CON TUS DOS NUEVOS XPATH
-        # ==========================================
         print("Paso 1: Escribiendo credenciales e ingresando...")
-        # Esperamos a que el formulario exista en pantalla
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]'))
-        )
-        
-        print("-> Inyectando credenciales mediante JavaScript directo...")
-        # Forzamos la inserción de datos directo en el motor de renderizado de SAP
-        driver.execute_script("document.getElementById('j_username').value = arguments[0];", SinUs)
-        driver.execute_script("document.getElementById('j_password').value = arguments[0];", SinPass)
-        time.sleep(1)
+        time.sleep(4)
 
-        print("-> Presionando el botón de ingreso...")
-        boton_enviar = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "logOnFormSubmit"))
-        )
-        driver.execute_script("arguments[0].click();", boton_enviar)
-        print("-> Credenciales enviadas con éxito.")
+        # Esperamos a que los campos existan físicamente en el código
+        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]')))
+        
+        print("-> Ejecutando inyección química directa en memoria de SAP...")
+        # Volvemos al método de inyección de ID puro que no requiere clics en máscaras visuales
+        driver.execute_script(f"document.getElementById('j_username').value = '{usuario_final}';")
+        driver.execute_script(f"document.getElementById('j_password').value = '{password_final}';")
+        time.sleep(2) 
+        
+        print("-> Presionando botón de ingreso 'Log On'...")
+        boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
+        driver.execute_script("arguments.click();", boton_submit)
+        print("-> Formulario enviado.")
         
         driver.switch_to.default_content()
-        time.sleep(10) # Damos tiempo extra para que procese el login internacional
+        time.sleep(10)
 
-        # ==========================================
-        # CONTINUACIÓN DE LA NAVEGACIÓN
-        # ==========================================
         print("Paso 2: Navegando por el menú de aplicaciones...")
         time.sleep(6) 
 
@@ -132,7 +128,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         boton_apps = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(@id, 'btnApplicaciones')]"))
         )
-        driver.execute_script("arguments[0].click();", boton_apps)
+        driver.execute_script("arguments.click();", boton_apps)
         time.sleep(3)
 
         print("-> Buscando e ingresando al módulo de consultas...")
@@ -140,13 +136,13 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
             tile_modulo = WebDriverWait(driver, 15).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
             )
-            driver.execute_script("arguments[0].click();", tile_modulo)
+            driver.execute_script("arguments.click();", tile_modulo)
         except:
             print("-> El ID rígido falló. Intentando buscar por clase genérica...")
             tile_generico = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, "sapFioriObjectPageHeaderTitle"))
             )
-            driver.execute_script("arguments[0].click();", tile_generico)
+            driver.execute_script("arguments.click();", tile_generico)
             
         print("-> Ingreso al módulo completado con éxito.")
         time.sleep(5)
@@ -212,8 +208,10 @@ def ver_error():
 def ejecutar_bot(payload: dict):
     r_inicio = str(payload.get("rango_inicio", ""))
     r_fin = str(payload.get("rango_fin", ""))
-    usuario = str(payload.get("SinUs", payload.get("sinus", payload.get("Sinus", ""))))
-    password = str(payload.get("SinPass", payload.get("sinpass", payload.get("Sinpass", ""))))
+    
+    # Buscador ultra-flexible de variables (Acepta cualquier combinación de nombres)
+    usuario = str(payload.get("SinUs", payload.get("sinus", payload.get("Sinus", payload.get("usuario_sap", ""))))).strip()
+    password = str(payload.get("SinPass", payload.get("sinpass", payload.get("Sinpass", payload.get("password_sap", ""))))).strip()
     
     tarea_bot_sap(r_inicio, r_fin, usuario, password)
     return {"status": "Proceso ejecutado"}
