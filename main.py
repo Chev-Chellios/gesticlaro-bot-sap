@@ -75,15 +75,13 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
 
     try:
         print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display")
+        driver.get("https://ondemand.com")
         
-        # --- AQUÍ APLICAMOS TU ESPERA ADICIONAL ESTRATÉGICA ---
         print("-> Esperando 12 segundos fijos para que la red cargue por completo el botón...")
         time.sleep(12) 
 
         print("Paso 0: Verificando si requiere desplegar login corporativo...")
         try:
-            # Ahora lo espera dinámicamente hasta 20 segundos más si es necesario
             boton_desplegar = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span | //*[@id="headerLoginButton"]'))
             )
@@ -99,15 +97,14 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
             print(f"-> Se detectaron {len(iframes)} iframes. Saltando al iframe del formulario...")
             driver.switch_to.frame(0)
 
-                print("Paso 1: Escribiendo credenciales e ingresando...")
-        # 1. Espera explícita de 4 segundos a que el formulario dentro del iframe se asiente por completo
+        print("Paso 1: Escribiendo credenciales e ingresando...")
+        # Pausa estratégica para que el formulario dentro del iframe se asiente por completo
         time.sleep(4)
 
         campo_usuario = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="j_username"]'))
         )
-        
-        # 2. Forzamos un clic en el campo de texto para ganar el foco antes de escribir
+        # Clic forzado para ganar el foco antes de tipear
         driver.execute_script("arguments[0].click();", campo_usuario)
         time.sleep(1)
         campo_usuario.clear()
@@ -121,7 +118,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         campo_password.send_keys(SinPass)
         print("-> Contraseña ingresada.")
         
-        time.sleep(2) # Pausa de seguridad antes de enviar
+        time.sleep(2) 
         
         print("-> Presionando botón de ingreso 'Log On'...")
         boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
@@ -130,7 +127,6 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         
         driver.switch_to.default_content()
         time.sleep(10)
-
 
         print("Paso 2: Navegando por el menú de aplicaciones...")
         time.sleep(6) 
@@ -149,7 +145,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
             )
             driver.execute_script("arguments[0].click();", tile_modulo)
         except:
-            print("-> ID rígido falló. Intentando buscar por clase genérica...")
+            print("-> El ID rígido falló. Intentando buscar por clase genérica...")
             tile_generico = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, "sapFioriObjectPageHeaderTitle"))
             )
