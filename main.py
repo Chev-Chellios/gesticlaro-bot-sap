@@ -105,8 +105,8 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         
         print("-> Inyectando credenciales mediante JavaScript directo...")
         # Forzamos la inserción de datos directo en el motor de renderizado de SAP
-        driver.execute_script("document.getElementById('j_username').value = arguments[0];", usuario_sap)
-        driver.execute_script("document.getElementById('j_password').value = arguments[0];", password_sap)
+        driver.execute_script("document.getElementById('j_username').value = arguments[0];", SinUs)
+        driver.execute_script("document.getElementById('j_password').value = arguments[0];", SinPass)
         time.sleep(1)
 
         print("-> Presionando el botón de ingreso...")
