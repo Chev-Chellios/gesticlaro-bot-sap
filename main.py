@@ -146,34 +146,45 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
         driver.switch_to.default_content()
         time.sleep(12) # Damos tiempo amplio para pasar al Home
 
-        print("Paso 2: Navegando por el menú de aplicaciones...")
-        time.sleep(6) 
+        # ==========================================
+        # PASO 2: NAVEGACIÓN EXTENDIDA CON PACIENCIA EXTREMA
+        # ==========================================
+        print("Paso 2: Navegando por el menu de aplicaciones...")
+        # Aumentamos la pausa fija inicial para absorber la lentitud del Home de SAP
+        print("-> Dando 14 segundos fijos para que el Home de SAP procese la red pesada...")
+        time.sleep(14) 
 
-        print("-> Buscando y presionando el botón de Aplicaciones...")
-        boton_apps = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[contains(@id, 'btnApplicaciones')]"))
+        print("-> Buscando y esperando el boton de Aplicaciones (btnApplicaciones)...")
+        # Extendemos el WebDriverWait a 40 segundos de paciencia para servidores lentos
+        boton_apps = WebDriverWait(driver, 40).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="btnApplicaciones-BDI-content"] | //*[contains(@id, "btnApplicaciones")]'))
         )
+        print("-> ¡Boton de Aplicaciones detectado visualmente! Forzando click...")
         driver.execute_script("arguments.click();", boton_apps)
-        time.sleep(3)
+        
+        # Breve pausa para que se despliegue el panel de los azulejos (Tiles)
+        print("-> Esperando despliegue de azulejos...")
+        time.sleep(5)
 
-        print("-> Buscando e ingresando al módulo de consultas...")
+        print("-> Buscando e ingresando al azulejo del modulo de consultas (__tile3-focus)...")
         try:
-            tile_modulo = WebDriverWait(driver, 15).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
+            # Esperamos hasta 30 segundos a que el azulejo específico aparezca
+            tile_modulo = WebDriverWait(driver, 30).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"] | //*[contains(@id, "tile3")]'))
             )
+            print("-> ¡Azulejo encontrado! Forzando ingreso...")
             driver.execute_script("arguments.click();", tile_modulo)
-        except:
-            print("-> El ID rígido falló. Intentando buscar por clase genérica...")
-            tile_generico = WebDriverWait(driver, 10).until(
+        except Exception as tile_err:
+            print(f"-> Azulejo rigido no disponible ({tile_err}). Buscando por clase generica de SAP...")
+            tile_generico = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, "sapFioriObjectPageHeaderTitle"))
             )
             driver.execute_script("arguments.click();", tile_generico)
             
-        print("-> Ingreso al módulo completado con éxito.")
-        time.sleep(5)
-
-        xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
-        xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
+        print("-> ¡Ingreso al modulo de reportes completado con exito total!")
+        # Damos 8 segundos para que cargue el formulario donde se ponen los rangos de inicio y fin
+        print("-> Esperando que se dibuje el formulario de rangos numéricos...")
+        time.sleep(8)
 
         print("Paso 3: Consultando Stock Disponible Principal...")
         campo_inicio = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview8--input0"]')))
