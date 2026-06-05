@@ -100,23 +100,14 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         # ==========================================
         # CÓDIGO DEL PASO 1 CON TUS DOS NUEVOS XPATH
         # ==========================================
-        print("Paso 1: Escribiendo credenciales e ingresando...")
+               print("Paso 1: Escribiendo credenciales e ingresando...")
+        # Esperamos a que el formulario exista en pantalla
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]'))
+        )
         
-        print("-> Activando el contenedor de Usuario...")
-        contenedor_usuario = WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="j_username-group"]/div[2]/div/div/div'))
-        )
-        driver.execute_script("arguments[0].click();", contenedor_usuario)
-        time.sleep(1)
-
-        print("-> Activando el contenedor de Contraseña...")
-        contenedor_password = WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="j_password-group"]/div[2]/div/div/div'))
-        )
-        driver.execute_script("arguments[0].click();", contenedor_password)
-        time.sleep(2)
-
         print("-> Inyectando credenciales mediante JavaScript directo...")
+        # Forzamos la inserción de datos directo en el motor de renderizado de SAP
         driver.execute_script("document.getElementById('j_username').value = arguments[0];", SinUs)
         driver.execute_script("document.getElementById('j_password').value = arguments[0];", SinPass)
         time.sleep(1)
@@ -129,8 +120,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, SinUs: str, SinPass: str):
         print("-> Credenciales enviadas con éxito.")
         
         driver.switch_to.default_content()
-        time.sleep(10)
-
+        time.sleep(10) # Damos tiempo extra para que procese el login internacional
 
         # ==========================================
         # CONTINUACIÓN DE LA NAVEGACIÓN
