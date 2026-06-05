@@ -111,15 +111,40 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
         # Volvemos al método de inyección de ID puro que no requiere clics en máscaras visuales
         driver.execute_script(f"document.getElementById('j_username').value = '{usuario_final}';")
         driver.execute_script(f"document.getElementById('j_password').value = '{password_final}';")
-        time.sleep(2) 
+        time.sleep(5) 
         
-        print("-> Presionando botón de ingreso 'Log On'...")
-        boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
-        driver.execute_script("arguments.click();", boton_submit)
-        print("-> Formulario enviado.")
+        print("-> Presionando boton de ingreso 'Log On'...")
+        # Le damos 5 segundos de cortesía para que el formulario valide los textos inyectados
+        time.sleep(5) 
         
+        try:
+            # Opción A: Intentar por el ID estándar esperando que sea clickeable
+            boton_submit = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "logOnFormSubmit"))
+            )
+            driver.execute_script("arguments[0].click();", boton_submit)
+            print("-> Formulario enviado mediante ID estándar.")
+        except:
+            print("-> ID estándar falló. Intentando buscar por texto visible 'Log On'...")
+            try:
+                # Opción B: Buscar el botón que tenga escrito "Log On" (por el idioma inglés)
+                boton_texto = WebDriverWait(driver, 8).until(
+                    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Log On')] | //input[@value='Log On']"))
+                )
+                driver.execute_script("arguments[0].click();", boton_texto)
+                print("-> Formulario enviado mediante texto 'Log On'.")
+            except:
+                print("-> Búsqueda por texto falló. Aplicando fuerza bruta por clase genérica de SAP...")
+                # Opción C: Buscar por la clase nativa que agrupa los botones en SAP IAS
+                boton_clase = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.CLASS_NAME, "comSapIdpIdpButtons"))
+                )
+                driver.execute_script("arguments[0].click();", boton_clase)
+                print("-> Formulario enviado mediante clase corporativa.")
+
+        print("-> Esperando procesamiento del Login...")
         driver.switch_to.default_content()
-        time.sleep(10)
+        time.sleep(12) # Damos tiempo amplio para pasar al Home
 
         print("Paso 2: Navegando por el menú de aplicaciones...")
         time.sleep(6) 
