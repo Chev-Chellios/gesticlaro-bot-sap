@@ -67,41 +67,45 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario: str, password: str
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--window-size=1920,1080")
+    # FORZAMOS UNA RESOLUCIÓN ULTRA-GIGANTE DE ESCRITORIO
+    chrome_options.add_argument("--window-size=2560,1600")
+    chrome_options.add_argument("--start-maximized")
     
     driver = webdriver.Chrome(options=chrome_options)
     registros_stock_actual = []
     registros_transito = []
 
     try:
-        print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
-        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#Home-show")
-        time.sleep(5)
+                print("Iniciando simulación del navegador... Abriendo SAP Fiori Claro")
+        driver.get("https://ondemand.com")
+        
+        # --- NUEVA ESPERA AGRESIVA Y PACIENTE ---
+        print("-> Dando una pausa fija de 12 segundos para conexiones internacionales lentas...")
+        time.sleep(12)
 
-        print("Paso 0: Verificando presencia del botón superior...")
-        try:
-            boton_superior = WebDriverWait(driver, 5).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"]/span'))
-            )
-            driver.execute_script("arguments.click();", boton_superior)
-            print("-> Botón superior presionado con éxito.")
-            time.sleep(4)
-        except:
-            print("-> El botón superior no está visible. Continuando al formulario...")
+        print("Paso 0: Esperando dinámicamente a que aparezca el botón superior de login...")
+        # Selenium vigilará la pantalla hasta un máximo de 25 segundos
+        boton_superior = WebDriverWait(driver, 25).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="headerLoginButton"] | //*[@id="headerLoginButton"]/span'))
+        )
+        
+        print("-> ¡Botón superior detectado! Ejecutando clic forzado...")
+        driver.execute_script("arguments[0].click();", boton_superior)
+        print("-> Clic ejecutado con éxito.")
+        time.sleep(5) # Esperamos a que se despliegue el contenedor del formulario
 
         print("Paso 1: Escribiendo credenciales e ingresando...")
         campo_usuario = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]'))
         )
         
-        # Inyección directa por JavaScript (Inmune a problemas de foco)
-        driver.execute_script("document.getElementById('j_username').value = arguments;", usuario)
-        driver.execute_script("document.getElementById('j_password').value = arguments;", password)
+        driver.execute_script("document.getElementById('j_username').value = arguments[0];", usuario)
+        driver.execute_script("document.getElementById('j_password').value = arguments[0];", password)
         time.sleep(1)
 
         print("-> Presionando botón de ingreso 'Log On'...")
         boton_submit = driver.find_element(By.ID, "logOnFormSubmit")
-        driver.execute_script("arguments.click();", boton_submit)
+        driver.execute_script("arguments[0].click();", boton_submit)
         print("-> Formulario enviado.")
         time.sleep(8)
 
@@ -109,13 +113,13 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario: str, password: str
         boton_apps = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//*[contains(@id, 'btnApplicaciones')]"))
         )
-        driver.execute_script("arguments.click();", boton_apps)
+        driver.execute_script("arguments[0].click();", boton_apps)
         time.sleep(3)
 
         tile_modulo = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
         )
-        driver.execute_script("arguments.click();", tile_modulo)
+        driver.execute_script("arguments[0].click();", tile_modulo)
         time.sleep(5)
 
         xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
@@ -178,11 +182,8 @@ def ver_error():
 
 @app.post("/ejecutar-bot")
 def ejecutar_bot(payload: dict):
-    # Usamos un diccionario abierto (payload) para aceptar las variables sin importar mayúsculas/minúsculas
     r_inicio = str(payload.get("rango_inicio", ""))
     r_fin = str(payload.get("rango_fin", ""))
-    
-    # Busca la combinación exacta que envíe Base44 de forma elástica
     usuario = str(payload.get("SinUs", payload.get("sinus", payload.get("Sinus", ""))))
     password = str(payload.get("SinPass", payload.get("sinpass", payload.get("Sinpass", ""))))
     
