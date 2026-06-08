@@ -146,31 +146,10 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
         driver.switch_to.default_content()
         time.sleep(12) # Damos tiempo amplio para pasar al Home
 
-        print("Paso 2: Navegando por el menú de aplicaciones...")
-        time.sleep(6) 
-
-        print("-> Buscando y presionando el botón de Aplicaciones...")
-        boton_apps = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[contains(@id, 'btnApplicaciones')]"))
-        )
-        driver.execute_script("arguments.click();", boton_apps)
-        time.sleep(3)
-
-        print("-> Buscando e ingresando al módulo de consultas...")
-        try:
-            tile_modulo = WebDriverWait(driver, 15).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="__tile3-focus"]'))
-            )
-            driver.execute_script("arguments.click();", tile_modulo)
-        except:
-            print("-> El ID rígido falló. Intentando buscar por clase genérica...")
-            tile_generico = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, "sapFioriObjectPageHeaderTitle"))
-            )
-            driver.execute_script("arguments.click();", tile_generico)
-            
-        print("-> Ingreso al módulo completado con éxito.")
-        time.sleep(5)
+        print("Paso 2: Viajando directo al modulo mediante URL Maestra...")
+        driver.get("https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display")
+        print("-> Esperando 22 segundos de cortesia extendida para la carga del modulo...")
+        time.sleep(22)
 
         xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
         xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
