@@ -167,7 +167,7 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
         print("Paso 4: Reabriendo filtros para Depósito de Reingreso...")
         WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))).click()
         time.sleep(1)
-        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview11--rdb5-Button"]'))).click()
+        WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb5"]/div/svg/circle[2]'))).click()
         driver.find_element(By.XPATH, xpath_btn_consultar).click()
         time.sleep(12)
         registros_stock_actual.extend(extraer_datos_tabla(driver))
