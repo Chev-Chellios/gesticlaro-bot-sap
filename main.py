@@ -151,15 +151,15 @@ def tarea_bot_sap(rango_inicio: str, rango_fin: str, usuario_final: str, passwor
         print("-> Esperando 22 segundos de cortesia extendida para la carga del modulo...")
         time.sleep(22)
 
-        xpath_btn_consultar = '//*[@id="__xmlview8--button2-BDI-content"]'
+        xpath_btn_consultar = '//*[@id="__xmlview4--button2-BDI-content"]'
         xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
 
         print("Paso 3: Consultando Stock Disponible Principal...")
-        campo_inicio = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview8--input0"]')))
+        campo_inicio = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--input0-inner"]')))
         campo_inicio.clear()
         campo_inicio.send_keys(rango_inicio)
-        driver.find_element(By.XPATH, '//*[@id="__xmlview8--input1"]').clear()
-        driver.find_element(By.XPATH, '//*[@id="__xmlview8--input1"]').send_keys(rango_fin)
+        driver.find_element(By.XPATH, '//*[@id="__xmlview4--input1-inner"]').clear()
+        driver.find_element(By.XPATH, '//*[@id="__xmlview4--input1-inner"]').send_keys(rango_fin)
         driver.find_element(By.XPATH, xpath_btn_consultar).click()
         time.sleep(12)
         registros_stock_actual.extend(extraer_datos_tabla(driver))
