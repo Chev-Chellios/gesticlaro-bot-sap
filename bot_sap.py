@@ -157,28 +157,76 @@ def main():
         except Exception:
             log("El botón superior no respondió. Buscando formulario directamente...")
 
-        log("Buscando si el formulario está dentro de un iframe...")
-        iframes = driver.find_elements(By.TAG_NAME, "iframe")
-        if len(iframes) > 0:
-            log(f"Se detectaron {len(iframes)} iframe(s). Saltando al iframe del formulario...")
-            driver.switch_to.frame(0)
-
         os.makedirs("data", exist_ok=True)
         driver.save_screenshot("data/pre_fill.png")
 
         log("Paso 1: Escribiendo credenciales e ingresando...")
         time.sleep(4)
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]')))
 
-        log("Inyectando credenciales directamente en el DOM...")
-        driver.execute_script("document.getElementById('j_username').value = arguments[0];", USUARIO)
-        driver.execute_script("document.getElementById('j_password').value = arguments[0];", PASSWORD)
-        time.sleep(5)
+        # Diagnóstico: buscar j_username tanto en el documento principal
+        # como dentro de cada iframe, e inyectar en TODOS los contextos
+        # donde exista (puede haber más de un formulario en la página).
+        driver.switch_to.default_content()
+        iframes = driver.find_elements(By.TAG_NAME, "iframe")
+        log(f"Iframes detectados en el documento principal: {len(iframes)}")
+        for i, fr in enumerate(iframes):
+            try:
+                log(f"  iframe[{i}] src={fr.get_attribute('src')}")
+            except Exception as e:
+                log(f"  iframe[{i}] error leyendo src: {e}")
 
+        inyectado_en_algun_lado = False
+
+        # 1) Documento principal
+        driver.switch_to.default_content()
+        campos_main = driver.find_elements(By.XPATH, '//*[@id="j_username"]')
+        log(f"j_username en documento principal: {len(campos_main)} elemento(s)")
+        if campos_main:
+            driver.execute_script("document.getElementById('j_username').value = arguments[0];", USUARIO)
+            driver.execute_script("document.getElementById('j_password').value = arguments[0];", PASSWORD)
+            val = driver.execute_script("return document.getElementById('j_username').value;")
+            log(f"  -> Valor tras inyección en doc. principal: '{val}'")
+            if val:
+                inyectado_en_algun_lado = True
+
+        # 2) Cada iframe de primer nivel
+        frame_inyectado = None
+        for i in range(len(iframes)):
+            driver.switch_to.default_content()
+            try:
+                frames = driver.find_elements(By.TAG_NAME, "iframe")
+                driver.switch_to.frame(frames[i])
+            except Exception as e:
+                log(f"  No se pudo entrar al iframe[{i}]: {e}")
+                continue
+
+            campos_iframe = driver.find_elements(By.XPATH, '//*[@id="j_username"]')
+            log(f"j_username dentro de iframe[{i}]: {len(campos_iframe)} elemento(s)")
+            if campos_iframe:
+                driver.execute_script("document.getElementById('j_username').value = arguments[0];", USUARIO)
+                driver.execute_script("document.getElementById('j_password').value = arguments[0];", PASSWORD)
+                val = driver.execute_script("return document.getElementById('j_username').value;")
+                log(f"  -> Valor tras inyección en iframe[{i}]: '{val}'")
+                if val:
+                    inyectado_en_algun_lado = True
+                    frame_inyectado = i
+
+        time.sleep(3)
         driver.save_screenshot("data/filled.png")
 
+        if not inyectado_en_algun_lado:
+            log("ADVERTENCIA: no se pudo confirmar la inyección en ningún contexto. Se continúa para diagnosticar.")
+
+        # Si se inyectó dentro de un iframe, posicionarse ahí para el submit.
+        # Si fue en el documento principal (o no se confirmó en ningún lado),
+        # nos quedamos / volvemos al documento principal.
+        driver.switch_to.default_content()
+        if frame_inyectado is not None:
+            frames = driver.find_elements(By.TAG_NAME, "iframe")
+            driver.switch_to.frame(frames[frame_inyectado])
+
         log("Presionando botón de ingreso 'Log On'...")
-        time.sleep(5)
+        time.sleep(2)
 
         try:
             boton_submit = WebDriverWait(driver, 10).until(
