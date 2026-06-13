@@ -110,6 +110,39 @@ def guardar_resultado(data, status, mensaje):
     log(f"Guardado {SALIDA_JSON} ({len(data)} registros, status={status})")
 
 
+def encontrar_campo(driver, by, selector, timeout=15):
+    """
+    Busca un elemento recorriendo el documento principal y todos los iframes
+    (1 nivel de profundidad). Devuelve el elemento ya posicionado en el frame
+    correcto, o None si no lo encuentra en ningún lado.
+    """
+    driver.switch_to.default_content()
+    try:
+        return WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((by, selector))
+        )
+    except Exception:
+        pass
+
+    driver.switch_to.default_content()
+    total_iframes = len(driver.find_elements(By.TAG_NAME, "iframe"))
+    for idx in range(total_iframes):
+        driver.switch_to.default_content()
+        try:
+            frames = driver.find_elements(By.TAG_NAME, "iframe")
+            driver.switch_to.frame(frames[idx])
+            el = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((by, selector))
+            )
+            log(f"Campo {selector} encontrado dentro del iframe #{idx}")
+            return el
+        except Exception:
+            continue
+
+    driver.switch_to.default_content()
+    return None
+
+
 def main():
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
@@ -126,7 +159,7 @@ def main():
         driver.get(URL_HOME)
         time.sleep(12)
 
-        log("Buscando botón de login...")
+        log("Buscando botón de login (header)...")
         try:
             boton_desplegar = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable(
@@ -138,16 +171,42 @@ def main():
         except Exception:
             log("Botón superior no encontrado, buscando formulario directo...")
 
-        iframes = driver.find_elements(By.TAG_NAME, "iframe")
-        if len(iframes) > 0:
-            driver.switch_to.frame(0)
-
-        log("Escribiendo credenciales...")
-        time.sleep(4)
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, "j_username")))
-        set_value_js(driver, "j_username", USUARIO)
-        set_value_js(driver, "j_password", PASSWORD)
         time.sleep(3)
+        os.makedirs("data", exist_ok=True)
+        driver.save_screenshot("data/pre_fill.png")
+
+        log("Buscando campo de usuario (j_username) en página principal e iframes...")
+        campo_user = encontrar_campo(driver, By.ID, "j_username", timeout=20)
+        if campo_user is None:
+            raise Exception("No se encontró el campo 'j_username' en ningún frame de la página")
+
+        campo_pass = driver.find_element(By.ID, "j_password")
+
+        log("Escribiendo usuario y contraseña (send_keys)...")
+        campo_user.click()
+        campo_user.clear()
+        campo_user.send_keys(USUARIO)
+
+        campo_pass.click()
+        campo_pass.clear()
+        campo_pass.send_keys(PASSWORD)
+
+        val_user = driver.execute_script("return document.getElementById('j_username') ? document.getElementById('j_username').value : null;")
+        val_pass = driver.execute_script("return document.getElementById('j_password') ? document.getElementById('j_password').value : null;")
+        log(f"Verificación tras send_keys -> usuario: '{val_user}' (longitud={len(val_user or '')}), password longitud={len(val_pass or '')}")
+
+        if not val_user or not val_pass:
+            log("send_keys no dejó los valores escritos. Probando con inyección JS + eventos...")
+            set_value_js(driver, "j_username", USUARIO)
+            set_value_js(driver, "j_password", PASSWORD)
+            val_user = driver.execute_script("return document.getElementById('j_username') ? document.getElementById('j_username').value : null;")
+            val_pass = driver.execute_script("return document.getElementById('j_password') ? document.getElementById('j_password').value : null;")
+            log(f"Verificación tras JS -> usuario: '{val_user}' (longitud={len(val_user or '')}), password longitud={len(val_pass or '')}")
+
+        driver.save_screenshot("data/filled.png")
+
+        if not val_user or not val_pass:
+            log("ADVERTENCIA: los campos siguen vacíos. Se continúa de todas formas para diagnosticar, pero el login probablemente falle.")
 
         log("Presionando botón de ingreso...")
         try:
@@ -173,15 +232,12 @@ def main():
         driver.switch_to.default_content()
         time.sleep(12)
 
-        os.makedirs("data", exist_ok=True)
-        try:
-            driver.save_screenshot("data/post_login.png")
-        except Exception:
-            pass
+        driver.save_screenshot("data/post_login.png")
 
-        log("Navegando al módulo de stock por antigüedad...")
+        log("Navegando directo al módulo de stock por antigüedad (URL directa)...")
         driver.get(URL_STOCK)
         time.sleep(22)
+        driver.save_screenshot("data/post_stock_nav.png")
 
         xpath_btn_consultar = '//*[@id="__xmlview4--button2-BDI-content"]'
         xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
