@@ -1,0 +1,260 @@
+import os
+import json
+import time
+import traceback
+from datetime import datetime, timezone
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# ──────────────────────────────────────────────
+# CONFIGURACIÓN
+# ──────────────────────────────────────────────
+# Las credenciales se leen de variables de entorno (configuradas como
+# GitHub Secrets: SAP_USER y SAP_PASS). Si no existen, usa estos valores
+# por defecto (recomendado: moverlos a Secrets y borrar de aquí).
+USUARIO = os.getenv("SAP_USER", "AGED049128")
+PASSWORD = os.getenv("SAP_PASS", "Lunes18/")
+
+RANGO_INICIO = os.getenv("SAP_RANGO_INICIO", "")
+RANGO_FIN = os.getenv("SAP_RANGO_FIN", "")
+
+URL_HOME = "https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display"
+URL_STOCK = "https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display"
+
+SALIDA_JSON = os.path.join("data", "stock_sap.json")
+SALIDA_LOG = os.path.join("data", "ultimo_log.txt")
+
+COLUMNAS_SAP = [
+    "Material", "Serial", "Texto", "Centro", "Almacen", "Movimiento",
+    "Mov_texto", "Modelo", "Origen", "Precio", "Dias_Antiguedad",
+    "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"
+]
+COLUMNAS_RELEVANTES = {
+    "Material", "Serial", "Texto", "Centro", "Precio",
+    "Dias_Antiguedad", "Semaforo", "Fecha_Antiguedad", "Nro_Pedido"
+}
+
+LOG_LINES = []
+
+
+def log(msg):
+    print(msg)
+    LOG_LINES.append(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
+
+
+def guardar_log():
+    os.makedirs("data", exist_ok=True)
+    with open(SALIDA_LOG, "w", encoding="utf-8") as f:
+        f.write("\n".join(LOG_LINES))
+
+
+def set_value_js(driver, element_id, valor):
+    driver.execute_script(
+        """
+        const el = document.getElementById(arguments[0]);
+        if (!el) return false;
+        el.focus();
+        el.value = arguments[1];
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+        el.dispatchEvent(new Event('keyup', { bubbles: true }));
+        el.dispatchEvent(new Event('blur', { bubbles: true }));
+        return true;
+        """,
+        element_id, valor
+    )
+
+
+def extraer_datos_tabla(driver):
+    xpath_tabla = (
+        "//table[contains(@class, 'sapUiTableCtrl')]//tbody | "
+        "//table[contains(@class, 'sapMListTbl')]//tbody"
+    )
+    try:
+        tabla_body = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.XPATH, xpath_tabla))
+        )
+        filas = tabla_body.find_elements(By.TAG_NAME, "tr")
+        resultados = []
+        for fila in filas:
+            celdas = fila.find_elements(By.TAG_NAME, "td")
+            if celdas:
+                valores = [c.text.strip() for c in celdas]
+                if len(valores) >= len(COLUMNAS_SAP):
+                    registro = {
+                        COLUMNAS_SAP[i]: valores[i]
+                        for i in range(len(COLUMNAS_SAP))
+                        if COLUMNAS_SAP[i] in COLUMNAS_RELEVANTES
+                    }
+                    resultados.append(registro)
+        return resultados
+    except Exception as e:
+        log(f"Aviso: no se pudo leer la tabla ({e})")
+        return []
+
+
+def guardar_resultado(data, status, mensaje):
+    os.makedirs("data", exist_ok=True)
+    salida = {
+        "status": status,
+        "mensaje": mensaje,
+        "actualizado": datetime.now(timezone.utc).isoformat(),
+        "cantidad": len(data),
+        "data": data,
+    }
+    with open(SALIDA_JSON, "w", encoding="utf-8") as f:
+        json.dump(salida, f, ensure_ascii=False, indent=2)
+    log(f"Guardado {SALIDA_JSON} ({len(data)} registros, status={status})")
+
+
+def main():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--window-size=1920,1080")
+
+    driver = webdriver.Chrome(options=chrome_options)
+    registros_stock_actual = []
+    registros_transito = []
+
+    try:
+        log("Abriendo portal SAP Fiori de Claro...")
+        driver.get(URL_HOME)
+        time.sleep(12)
+
+        log("Buscando botón de login...")
+        try:
+            boton_desplegar = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '//*[@id="headerLoginButton"]/span | //*[@id="headerLoginButton"]')
+                )
+            )
+            boton_desplegar.click()
+            time.sleep(4)
+        except Exception:
+            log("Botón superior no encontrado, buscando formulario directo...")
+
+        iframes = driver.find_elements(By.TAG_NAME, "iframe")
+        if len(iframes) > 0:
+            driver.switch_to.frame(0)
+
+        log("Escribiendo credenciales...")
+        time.sleep(4)
+        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, "j_username")))
+        set_value_js(driver, "j_username", USUARIO)
+        set_value_js(driver, "j_password", PASSWORD)
+        time.sleep(3)
+
+        log("Presionando botón de ingreso...")
+        try:
+            boton_submit = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "logOnFormSubmit"))
+            )
+            driver.execute_script("arguments[0].click();", boton_submit)
+        except Exception:
+            try:
+                boton_texto = WebDriverWait(driver, 8).until(
+                    EC.element_to_be_clickable(
+                        (By.XPATH, "//button[contains(text(), 'Log On')] | //input[@value='Log On']")
+                    )
+                )
+                driver.execute_script("arguments[0].click();", boton_texto)
+            except Exception:
+                boton_clase = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.CLASS_NAME, "comSapIdpIdpButtons"))
+                )
+                driver.execute_script("arguments[0].click();", boton_clase)
+
+        log("Procesando login...")
+        driver.switch_to.default_content()
+        time.sleep(12)
+
+        os.makedirs("data", exist_ok=True)
+        try:
+            driver.save_screenshot("data/post_login.png")
+        except Exception:
+            pass
+
+        log("Navegando al módulo de stock por antigüedad...")
+        driver.get(URL_STOCK)
+        time.sleep(22)
+
+        xpath_btn_consultar = '//*[@id="__xmlview4--button2-BDI-content"]'
+        xpath_reabrir_filtros = '//*[@id="__xmlview4--panelSel-CollapsedImg-img"]'
+
+        log("Consultando Stock Disponible Principal...")
+        campo_inicio = WebDriverWait(driver, 25).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--input0-inner"]'))
+        )
+        campo_inicio.clear()
+        campo_inicio.send_keys(RANGO_INICIO)
+        campo_fin = driver.find_element(By.XPATH, '//*[@id="__xmlview4--input1-inner"]')
+        campo_fin.clear()
+        campo_fin.send_keys(RANGO_FIN)
+        driver.find_element(By.XPATH, xpath_btn_consultar).click()
+        time.sleep(12)
+        registros_stock_actual.extend(extraer_datos_tabla(driver))
+        log(f"Stock principal: {len(registros_stock_actual)} registros")
+
+        log("Consultando Depósito de Reingreso...")
+        WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))
+        ).click()
+        time.sleep(1)
+        WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb5-label-bdi"]'))
+        ).click()
+        driver.find_element(By.XPATH, xpath_btn_consultar).click()
+        time.sleep(12)
+        registros_stock_actual.extend(extraer_datos_tabla(driver))
+        log(f"Stock total acumulado: {len(registros_stock_actual)} registros")
+
+        log("Consultando Stock en Tránsito...")
+        WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))
+        ).click()
+        time.sleep(1)
+        WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb4-label-bdi"]'))
+        ).click()
+        WebDriverWait(driver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb7-label-bdi"]'))
+        ).click()
+        driver.find_element(By.XPATH, xpath_btn_consultar).click()
+        time.sleep(12)
+        registros_transito = extraer_datos_tabla(driver)
+        log(f"Stock en tránsito: {len(registros_transito)} registros")
+
+        resultado_total = []
+        for r in registros_stock_actual:
+            r2 = dict(r)
+            r2["Categoria"] = "Stock actual"
+            resultado_total.append(r2)
+        for r in registros_transito:
+            r2 = dict(r)
+            r2["Categoria"] = "Stock en Tránsito"
+            resultado_total.append(r2)
+
+        guardar_resultado(resultado_total, "listo", f"Sincronización completada: {len(resultado_total)} registros")
+
+    except Exception as e:
+        traceback.print_exc()
+        log(f"ERROR CRÍTICO: {e}")
+        try:
+            os.makedirs("data", exist_ok=True)
+            driver.save_screenshot("data/error_sap.png")
+            log(f"URL al momento del error: {driver.current_url}")
+        except Exception:
+            pass
+        guardar_resultado([], "error", str(e))
+    finally:
+        guardar_log()
+        driver.quit()
+
+
+if __name__ == "__main__":
+    main()
