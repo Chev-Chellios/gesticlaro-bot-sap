@@ -177,9 +177,6 @@ def main():
         log("Paso 1: Escribiendo credenciales e ingresando...")
         time.sleep(4)
 
-        # Diagnóstico: buscar j_username tanto en el documento principal
-        # como dentro de cada iframe, e inyectar en TODOS los contextos
-        # donde exista (puede haber más de un formulario en la página).
         driver.switch_to.default_content()
         iframes = driver.find_elements(By.TAG_NAME, "iframe")
         log(f"Iframes detectados en el documento principal: {len(iframes)}")
@@ -189,55 +186,74 @@ def main():
             except Exception as e:
                 log(f"  iframe[{i}] error leyendo src: {e}")
 
-        inyectado_en_algun_lado = False
+        # El formulario de login vive dentro de iframe[0] (mismo origen).
+        # Nos posicionamos ahí para todo lo que sigue (inyección y submit).
+        if len(iframes) > 0:
+            driver.switch_to.frame(iframes[0])
+        else:
+            log("ADVERTENCIA: no se detectó ningún iframe, se trabaja en el documento principal.")
 
-        # 1) Documento principal
-        driver.switch_to.default_content()
-        campos_main = driver.find_elements(By.XPATH, '//*[@id="j_username"]')
-        log(f"j_username en documento principal: {len(campos_main)} elemento(s)")
-        if campos_main:
-            driver.execute_script("document.getElementById('j_username').value = arguments[0];", USUARIO)
-            driver.execute_script("document.getElementById('j_password').value = arguments[0];", PASSWORD)
-            val = driver.execute_script("return document.getElementById('j_username').value;")
-            log(f"  -> Valor tras inyección en doc. principal: '{val}'")
-            if val:
-                inyectado_en_algun_lado = True
+        # Diagnóstico de la estructura real de j_username / j_password:
+        # puede ser un <input> nativo o un Web Component con Shadow DOM
+        # (común en SAP UI5 moderno), donde el <input> real está adentro
+        # del shadowRoot y el .value del wrapper no hace nada.
+        diag = driver.execute_script("""
+            function info(id) {
+                const el = document.getElementById(id);
+                if (!el) return {found: false};
+                const sr = el.shadowRoot;
+                let inner = null;
+                if (sr) inner = sr.querySelector('input, textarea');
+                return {
+                    found: true,
+                    tag: el.tagName,
+                    hasShadow: !!sr,
+                    innerTag: inner ? inner.tagName : null,
+                    outerHTML: el.outerHTML ? el.outerHTML.slice(0, 200) : ''
+                };
+            }
+            return {user: info('j_username'), pass: info('j_password')};
+        """)
+        log(f"Diagnóstico j_username: {diag.get('user')}")
+        log(f"Diagnóstico j_password: {diag.get('pass')}")
 
-        # 2) Cada iframe de primer nivel
-        frame_inyectado = None
-        for i in range(len(iframes)):
-            driver.switch_to.default_content()
-            try:
-                frames = driver.find_elements(By.TAG_NAME, "iframe")
-                driver.switch_to.frame(frames[i])
-            except Exception as e:
-                log(f"  No se pudo entrar al iframe[{i}]: {e}")
-                continue
+        def inyectar(element_id, valor):
+            return driver.execute_script("""
+                const id = arguments[0];
+                const valor = arguments[1];
+                const el = document.getElementById(id);
+                if (!el) return null;
+                const sr = el.shadowRoot;
+                const target = sr ? sr.querySelector('input, textarea') : el;
+                if (!target) return null;
 
-            campos_iframe = driver.find_elements(By.XPATH, '//*[@id="j_username"]')
-            log(f"j_username dentro de iframe[{i}]: {len(campos_iframe)} elemento(s)")
-            if campos_iframe:
-                driver.execute_script("document.getElementById('j_username').value = arguments[0];", USUARIO)
-                driver.execute_script("document.getElementById('j_password').value = arguments[0];", PASSWORD)
-                val = driver.execute_script("return document.getElementById('j_username').value;")
-                log(f"  -> Valor tras inyección en iframe[{i}]: '{val}'")
-                if val:
-                    inyectado_en_algun_lado = True
-                    frame_inyectado = i
+                // Intentar usar el setter nativo del prototipo (necesario en
+                // frameworks tipo React/Angular que sobrescriben 'value').
+                const proto = target.tagName === 'TEXTAREA'
+                    ? window.HTMLTextAreaElement.prototype
+                    : window.HTMLInputElement.prototype;
+                const setter = Object.getOwnPropertyDescriptor(proto, 'value').set;
+                setter.call(target, valor);
 
-        time.sleep(3)
+                target.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+                target.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+                target.dispatchEvent(new Event('blur', { bubbles: true, composed: true }));
+                return target.value;
+            """, element_id, valor)
+
+        os.makedirs("data", exist_ok=True)
+        driver.save_screenshot("data/pre_fill.png")
+
+        val_user = inyectar("j_username", USUARIO)
+        val_pass = inyectar("j_password", PASSWORD)
+        log(f"Valor j_username tras inyección: '{val_user}'")
+        log(f"Valor j_password tras inyección: longitud={len(val_pass or '')}")
+
+        time.sleep(2)
         driver.save_screenshot("data/filled.png")
 
-        if not inyectado_en_algun_lado:
-            log("ADVERTENCIA: no se pudo confirmar la inyección en ningún contexto. Se continúa para diagnosticar.")
-
-        # Si se inyectó dentro de un iframe, posicionarse ahí para el submit.
-        # Si fue en el documento principal (o no se confirmó en ningún lado),
-        # nos quedamos / volvemos al documento principal.
-        driver.switch_to.default_content()
-        if frame_inyectado is not None:
-            frames = driver.find_elements(By.TAG_NAME, "iframe")
-            driver.switch_to.frame(frames[frame_inyectado])
+        if not val_user:
+            log("ADVERTENCIA: el campo de usuario sigue vacío. Se continúa para diagnosticar.")
 
         log("Presionando botón de ingreso 'Log On'...")
         time.sleep(2)
