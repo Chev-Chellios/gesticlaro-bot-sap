@@ -15,7 +15,14 @@ from selenium.webdriver.remote.remote_connection import RemoteConnection
 # de 120s por defecto, INDEPENDIENTE del page_load_timeout de Chrome. Si
 # driver.get() tarda más que esto, urllib3 lanza ReadTimeoutError antes de
 # que nuestro page_load_timeout pueda actuar. Lo subimos a 300s.
-RemoteConnection.set_timeout(300)
+# (La API cambió entre versiones de Selenium, probamos ambas formas).
+try:
+    RemoteConnection.client_config.timeout = 300
+except Exception:
+    try:
+        RemoteConnection.set_timeout(300)
+    except Exception:
+        pass
 
 # ──────────────────────────────────────────────
 # CONFIGURACIÓN
