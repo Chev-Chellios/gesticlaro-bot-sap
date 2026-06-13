@@ -1,40 +1,40 @@
-[17:03:18] Abriendo portal SAP Fiori de Claro...
-[17:03:18] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
-[17:03:34] Paso 0: Verificando si requiere desplegar login corporativo...
-[17:03:34] Botón superior encontrado y presionado.
-[17:03:39] Paso 1: Escribiendo credenciales e ingresando...
-[17:03:43] Iframes detectados en el documento principal: 1
-[17:03:43]   iframe[0] src=https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes?hc_login
-[17:03:43] Diagnóstico j_username: {'found': True, 'hasShadow': False, 'innerTag': None, 'outerHTML': '<input aria-describedby="j_username.errors" autocomplete="off" class="fn-input__text-field ids-input ids-input--text ids-input--clear js-has-input-clear js-login-toggle-active-input-user" id="j_userna', 'tag': 'INPUT'}
-[17:03:43] Diagnóstico j_password: {'found': True, 'hasShadow': False, 'innerTag': None, 'outerHTML': '<input aria-describedby="j_password.errors" autocomplete="off" class="fn-input__text-field ids-input ids-input--text ids-input--reveal js-login-toggle-active-input-password" id="j_password" maxlength=', 'tag': 'INPUT'}
-[17:03:43] Valor j_username tras inyección: ''
-[17:03:43] Valor j_password tras inyección: longitud=0
-[17:03:45] ADVERTENCIA: el campo de usuario sigue vacío. Se continúa para diagnosticar.
-[17:03:45] Presionando botón de ingreso 'Log On'...
-[17:03:48] Procesando login...
-[17:04:00] Navegando directo al módulo de stock por antigüedad (URL directa)...
-[17:04:00] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
-[17:04:22] Consultando Stock Disponible Principal...
-[17:04:48] ERROR CRÍTICO: Message: 
+[21:37:34] Abriendo portal SAP Fiori de Claro...
+[21:37:34] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
+[21:37:49] Paso 0: Verificando si requiere desplegar login corporativo...
+[21:37:49] Botón superior encontrado y presionado.
+[21:37:53] Paso 1: Escribiendo credenciales e ingresando...
+[21:37:57] Iframes detectados en el documento principal: 1
+[21:37:57]   iframe[0] src=https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes?hc_login
+[21:37:57] Diagnóstico j_username: {'found': True, 'hasShadow': False, 'innerTag': None, 'outerHTML': '<input aria-describedby="j_username.errors" autocomplete="off" class="fn-input__text-field ids-input ids-input--text ids-input--clear js-has-input-clear js-login-toggle-active-input-user" id="j_userna', 'tag': 'INPUT'}
+[21:37:57] Diagnóstico j_password: {'found': True, 'hasShadow': False, 'innerTag': None, 'outerHTML': '<input aria-describedby="j_password.errors" autocomplete="off" class="fn-input__text-field ids-input ids-input--text ids-input--reveal js-login-toggle-active-input-password" id="j_password" maxlength=', 'tag': 'INPUT'}
+[21:37:58] Valor j_username tras inyección: ''
+[21:37:58] Valor j_password tras inyección: longitud=0
+[21:38:00] ADVERTENCIA: el campo de usuario sigue vacío. Se continúa para diagnosticar.
+[21:38:00] Presionando botón de ingreso 'Log On'...
+[21:38:02] Procesando login...
+[21:38:15] Navegando directo al módulo de stock por antigüedad (URL directa)...
+[21:38:15] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
+[21:38:37] Consultando Stock Disponible Principal...
+[21:39:02] ERROR CRÍTICO: Message: 
 Stacktrace:
-#0 0x55c4fe03880a <unknown>
-#1 0x55c4fda1b289 <unknown>
-#2 0x55c4fda6f9b4 <unknown>
-#3 0x55c4fda6fc01 <unknown>
-#4 0x55c4fdaba874 <unknown>
-#5 0x55c4fdab7a4c <unknown>
-#6 0x55c4fda62f7f <unknown>
-#7 0x55c4fda63d61 <unknown>
-#8 0x55c4fdfff0f7 <unknown>
-#9 0x55c4fdffd8bd <unknown>
-#10 0x55c4fdfe85a6 <unknown>
-#11 0x55c4fdffe49a <unknown>
-#12 0x55c4fdfd0560 <unknown>
-#13 0x55c4fe025288 <unknown>
-#14 0x55c4fe025425 <unknown>
-#15 0x55c4fe03738e <unknown>
-#16 0x7fd18a29caa4 <unknown>
-#17 0x7fd18a329c6c <unknown>
+#0 0x55dd90e1d80a <unknown>
+#1 0x55dd90800289 <unknown>
+#2 0x55dd908549b4 <unknown>
+#3 0x55dd90854c01 <unknown>
+#4 0x55dd9089f874 <unknown>
+#5 0x55dd9089ca4c <unknown>
+#6 0x55dd90847f7f <unknown>
+#7 0x55dd90848d61 <unknown>
+#8 0x55dd90de40f7 <unknown>
+#9 0x55dd90de28bd <unknown>
+#10 0x55dd90dcd5a6 <unknown>
+#11 0x55dd90de349a <unknown>
+#12 0x55dd90db5560 <unknown>
+#13 0x55dd90e0a288 <unknown>
+#14 0x55dd90e0a425 <unknown>
+#15 0x55dd90e1c38e <unknown>
+#16 0x7f6b5169caa4 <unknown>
+#17 0x7f6b51729c6c <unknown>
 
-[17:04:48] URL al momento del error: https://aui6upqfs.accounts.ondemand.com/saml2/idp/sso/aui6upqfs.accounts.ondemand.com
-[17:04:48] Guardado data/stock_sap.json (0 registros, status=error)
+[21:39:02] URL al momento del error: https://aui6upqfs.accounts.ondemand.com/saml2/idp/sso/aui6upqfs.accounts.ondemand.com
+[21:39:02] Guardado data/stock_sap.json (0 registros, status=error)
