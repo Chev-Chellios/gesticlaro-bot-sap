@@ -9,8 +9,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 
 # ──────────────────────────────────────────────
 # CONFIGURACIÓN
@@ -54,23 +52,6 @@ def guardar_log():
         f.write("\n".join(LOG_LINES))
 
 
-def set_value_js(driver, element_id, valor):
-    driver.execute_script(
-        """
-        const el = document.getElementById(arguments[0]);
-        if (!el) return false;
-        el.focus();
-        el.value = arguments[1];
-        el.dispatchEvent(new Event('input', { bubbles: true }));
-        el.dispatchEvent(new Event('change', { bubbles: true }));
-        el.dispatchEvent(new Event('keyup', { bubbles: true }));
-        el.dispatchEvent(new Event('blur', { bubbles: true }));
-        return true;
-        """,
-        element_id, valor
-    )
-
-
 def extraer_datos_tabla(driver):
     xpath_tabla = (
         "//table[contains(@class, 'sapUiTableCtrl')]//tbody | "
@@ -111,47 +92,6 @@ def guardar_resultado(data, status, mensaje):
     with open(SALIDA_JSON, "w", encoding="utf-8") as f:
         json.dump(salida, f, ensure_ascii=False, indent=2)
     log(f"Guardado {SALIDA_JSON} ({len(data)} registros, status={status})")
-
-
-def escribir_lento(elemento, texto, delay=0.08):
-    """Escribe carácter por carácter con pequeñas pausas. Algunos formularios
-    SAP UI5/IAS no registran el valor si se escribe todo de una vez."""
-    for ch in texto:
-        elemento.send_keys(ch)
-        time.sleep(delay)
-
-
-def encontrar_campo(driver, by, selector, timeout=15):
-    """
-    Busca un elemento recorriendo el documento principal y todos los iframes
-    (1 nivel de profundidad). Devuelve el elemento ya posicionado en el frame
-    correcto, o None si no lo encuentra en ningún lado.
-    """
-    driver.switch_to.default_content()
-    try:
-        return WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((by, selector))
-        )
-    except Exception:
-        pass
-
-    driver.switch_to.default_content()
-    total_iframes = len(driver.find_elements(By.TAG_NAME, "iframe"))
-    for idx in range(total_iframes):
-        driver.switch_to.default_content()
-        try:
-            frames = driver.find_elements(By.TAG_NAME, "iframe")
-            driver.switch_to.frame(frames[idx])
-            el = WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((by, selector))
-            )
-            log(f"Campo {selector} encontrado dentro del iframe #{idx}")
-            return el
-        except Exception:
-            continue
-
-    driver.switch_to.default_content()
-    return None
 
 
 def cargar_pagina(driver, url, timeout=180, reintentos=2):
@@ -204,7 +144,7 @@ def main():
         cargar_pagina(driver, URL_HOME, timeout=180, reintentos=2)
         time.sleep(12)
 
-        log("Buscando botón de login (header)...")
+        log("Paso 0: Verificando si requiere desplegar login corporativo...")
         try:
             boton_desplegar = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable(
@@ -212,92 +152,34 @@ def main():
                 )
             )
             boton_desplegar.click()
+            log("Botón superior encontrado y presionado.")
             time.sleep(4)
         except Exception:
-            log("Botón superior no encontrado, buscando formulario directo...")
+            log("El botón superior no respondió. Buscando formulario directamente...")
 
-        time.sleep(3)
+        log("Buscando si el formulario está dentro de un iframe...")
+        iframes = driver.find_elements(By.TAG_NAME, "iframe")
+        if len(iframes) > 0:
+            log(f"Se detectaron {len(iframes)} iframe(s). Saltando al iframe del formulario...")
+            driver.switch_to.frame(0)
+
         os.makedirs("data", exist_ok=True)
         driver.save_screenshot("data/pre_fill.png")
 
-        log("Buscando campo de usuario (j_username) en página principal e iframes...")
-        campo_user = encontrar_campo(driver, By.ID, "j_username", timeout=20)
-        if campo_user is None:
-            raise Exception("No se encontró el campo 'j_username' en ningún frame de la página")
-
-        # El iframe puede estar todavía recargando/re-renderizando su contenido
-        # en el momento en que encontramos el campo por primera vez. Esperamos
-        # y volvemos a buscar referencias "frescas" antes de escribir.
-        log("Esperando estabilización del formulario dentro del iframe...")
+        log("Paso 1: Escribiendo credenciales e ingresando...")
         time.sleep(4)
-        try:
-            ready = driver.execute_script("return document.readyState;")
-            log(f"document.readyState del frame actual: {ready}")
-        except Exception:
-            pass
+        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="j_username"]')))
 
-        campo_user = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "j_username"))
-        )
-        campo_pass = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "j_password"))
-        )
-
-        log(f"Atributos j_username -> disabled={campo_user.get_attribute('disabled')}, readonly={campo_user.get_attribute('readonly')}, type={campo_user.get_attribute('type')}, displayed={campo_user.is_displayed()}, enabled={campo_user.is_enabled()}")
-        log(f"Atributos j_password -> disabled={campo_pass.get_attribute('disabled')}, readonly={campo_pass.get_attribute('readonly')}, type={campo_pass.get_attribute('type')}, displayed={campo_pass.is_displayed()}, enabled={campo_pass.is_enabled()}")
-
-        log("Escribiendo usuario (vía ActionChains - teclado global, evita problemas de iframe)...")
-        driver.execute_script("arguments[0].focus(); arguments[0].value='';", campo_user)
-        time.sleep(0.5)
-        ActionChains(driver).send_keys(USUARIO).perform()
-        time.sleep(0.5)
-
-        log("Escribiendo contraseña (vía ActionChains)...")
-        driver.execute_script("arguments[0].focus(); arguments[0].value='';", campo_pass)
-        time.sleep(0.5)
-        ActionChains(driver).send_keys(PASSWORD).perform()
-        time.sleep(0.5)
-
-        # Tab para disparar validación/blur del framework
-        ActionChains(driver).send_keys(Keys.TAB).perform()
-        time.sleep(1)
-
-        val_user = campo_user.get_attribute("value")
-        val_pass = campo_pass.get_attribute("value")
-        log(f"Verificación (Selenium attribute) -> usuario: '{val_user}' (longitud={len(val_user or '')}), password longitud={len(val_pass or '')}")
-
-        if not val_user or not val_pass:
-            log("Los campos siguen vacíos tras ActionChains. Probando escritura lenta por elemento como respaldo...")
-            campo_user.click()
-            time.sleep(0.3)
-            campo_user.clear()
-            escribir_lento(campo_user, USUARIO)
-            time.sleep(0.3)
-            campo_pass.click()
-            time.sleep(0.3)
-            campo_pass.clear()
-            escribir_lento(campo_pass, PASSWORD)
-            campo_pass.send_keys(Keys.TAB)
-            time.sleep(1)
-            val_user = campo_user.get_attribute("value")
-            val_pass = campo_pass.get_attribute("value")
-            log(f"Verificación (escritura lenta) -> usuario: '{val_user}' (longitud={len(val_user or '')}), password longitud={len(val_pass or '')}")
-
-        if not val_user or not val_pass:
-            log("Los campos siguen vacíos. Probando inyección JS + eventos como último recurso...")
-            set_value_js(driver, "j_username", USUARIO)
-            set_value_js(driver, "j_password", PASSWORD)
-            time.sleep(1)
-            val_user = driver.execute_script("return document.getElementById('j_username') ? document.getElementById('j_username').value : null;")
-            val_pass = driver.execute_script("return document.getElementById('j_password') ? document.getElementById('j_password').value : null;")
-            log(f"Verificación tras JS -> usuario: '{val_user}' (longitud={len(val_user or '')}), password longitud={len(val_pass or '')}")
+        log("Inyectando credenciales directamente en el DOM...")
+        driver.execute_script("document.getElementById('j_username').value = arguments[0];", USUARIO)
+        driver.execute_script("document.getElementById('j_password').value = arguments[0];", PASSWORD)
+        time.sleep(5)
 
         driver.save_screenshot("data/filled.png")
 
-        if not val_user or not val_pass:
-            log("ADVERTENCIA: los campos siguen vacíos. Se continúa de todas formas para diagnosticar, pero el login probablemente falle.")
+        log("Presionando botón de ingreso 'Log On'...")
+        time.sleep(5)
 
-        log("Presionando botón de ingreso...")
         try:
             boton_submit = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.ID, "logOnFormSubmit"))
