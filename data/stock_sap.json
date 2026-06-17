@@ -1,44 +1,7 @@
 {
-  "status": "listo",
-  "mensaje": "Sincronización completada: 3 registros",
-  "actualizado": "2026-06-17T12:44:09.215158+00:00",
-  "cantidad": 3,
-  "data": [
-    {
-      "Material": "Material",
-      "Serial": "Serial",
-      "Texto": "Texto",
-      "Centro": "Centro",
-      "Precio": "Precio",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual"
-    },
-    {
-      "Material": "Material",
-      "Serial": "Serial",
-      "Texto": "Texto",
-      "Centro": "Centro",
-      "Precio": "Precio",
-      "Dias_Antiguedad": "Días Antiguedad",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual"
-    },
-    {
-      "Material": "Material",
-      "Serial": "Serial",
-      "Texto": "Texto",
-      "Centro": "Centro",
-      "Precio": "Precio",
-      "Dias_Antiguedad": "Días Antiguedad",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock en Tránsito"
-    }
-  ]
+  "status": "error",
+  "mensaje": "Message: \n",
+  "actualizado": "2026-06-17T18:16:25.852511+00:00",
+  "cantidad": 0,
+  "data": []
 }
