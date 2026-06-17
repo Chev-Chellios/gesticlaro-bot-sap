@@ -101,6 +101,60 @@ def guardar_log():
         f.write("\n".join(LOG_LINES))
 
 
+def click_resiliente(driver, by, selector, timeout=15, intentos=3, descripcion=""):
+    """Espera que un elemento sea clickeable y le hace click, reintentando
+    si encuentra errores transitorios (overlay tapando, elemento stale, etc)."""
+    ultimo_error = None
+    for intento in range(1, intentos + 1):
+        try:
+            el = WebDriverWait(driver, timeout).until(
+                EC.element_to_be_clickable((by, selector))
+            )
+            el.click()
+            return el
+        except Exception as e:
+            ultimo_error = e
+            log(f"  Click en '{descripcion or selector}' falló (intento {intento}/{intentos}): {type(e).__name__}")
+            time.sleep(2)
+    raise Exception(f"No se pudo hacer click en '{descripcion or selector}' tras {intentos} intentos: {ultimo_error}")
+
+
+def esperar_resultados_tabla(driver, nombre_consulta="consulta", timeout=40):
+    """
+    Después de hacer click en 'Consultar', SAP UI5 dispara una llamada al
+    backend (OData) que puede tardar varios segundos. La tabla aparece en
+    el DOM casi inmediatamente pero solo con la fila de encabezado; los
+    datos reales se insertan después. Esperamos activamente hasta detectar
+    al menos una fila con datos (no solo el encabezado), o hasta el timeout.
+    """
+    fin = time.time() + timeout
+    ultimo_conteo_filas = 0
+    while time.time() < fin:
+        try:
+            tabla_body = driver.find_element(
+                By.XPATH,
+                "//table[contains(@class, 'sapUiTableCtrl')]//tbody | "
+                "//table[contains(@class, 'sapMListTbl')]//tbody"
+            )
+            filas = tabla_body.find_elements(By.TAG_NAME, "tr")
+            ultimo_conteo_filas = len(filas)
+            if len(filas) > 1:
+                # Verificar que al menos la segunda fila tenga texto real
+                # (no solo la cabecera repetida ni filas vacías).
+                celdas = filas[1].find_elements(By.TAG_NAME, "td")
+                textos = [c.text.strip() for c in celdas]
+                if any(textos):
+                    log(f"  '{nombre_consulta}': datos detectados tras "
+                        f"{timeout - (fin - time.time()):.1f}s ({len(filas)} filas)")
+                    return True
+        except Exception:
+            pass
+        time.sleep(1)
+    log(f"  '{nombre_consulta}': timeout esperando datos ({timeout}s), "
+        f"última lectura: {ultimo_conteo_filas} fila(s) en el DOM")
+    return False
+
+
 def extraer_datos_tabla(driver, nombre_consulta="consulta"):
     xpath_tabla = (
         "//table[contains(@class, 'sapUiTableCtrl')]//tbody | "
@@ -344,39 +398,31 @@ def main():
         campo_fin = driver.find_element(By.XPATH, '//*[@id="__xmlview4--input1-inner"]')
         campo_fin.clear()
         campo_fin.send_keys(RANGO_FIN)
-        driver.find_element(By.XPATH, xpath_btn_consultar).click()
-        time.sleep(12)
+        click_resiliente(driver, By.XPATH, xpath_btn_consultar, descripcion="botón consultar (principal)")
+        esperar_resultados_tabla(driver, "stock_principal", timeout=40)
         driver.save_screenshot("data/resultado_stock_principal.png")
         registros_stock_actual.extend(extraer_datos_tabla(driver, "stock_principal"))
         log(f"Stock principal: {len(registros_stock_actual)} registros")
 
         log("Consultando Depósito de Reingreso...")
-        WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))
-        ).click()
+        time.sleep(3)  # dejar que la UI se asiente tras la consulta anterior
+        click_resiliente(driver, By.XPATH, xpath_reabrir_filtros, descripcion="reabrir filtros (reingreso)")
         time.sleep(1)
-        WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb5-label-bdi"]'))
-        ).click()
-        driver.find_element(By.XPATH, xpath_btn_consultar).click()
-        time.sleep(12)
+        click_resiliente(driver, By.XPATH, '//*[@id="__xmlview4--rdb5-label-bdi"]', descripcion="radio reingreso")
+        click_resiliente(driver, By.XPATH, xpath_btn_consultar, descripcion="botón consultar (reingreso)")
+        esperar_resultados_tabla(driver, "deposito_reingreso", timeout=40)
         driver.save_screenshot("data/resultado_reingreso.png")
         registros_stock_actual.extend(extraer_datos_tabla(driver, "deposito_reingreso"))
         log(f"Stock total acumulado: {len(registros_stock_actual)} registros")
 
         log("Consultando Stock en Tránsito...")
-        WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, xpath_reabrir_filtros))
-        ).click()
+        time.sleep(3)
+        click_resiliente(driver, By.XPATH, xpath_reabrir_filtros, descripcion="reabrir filtros (tránsito)")
         time.sleep(1)
-        WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb4-label-bdi"]'))
-        ).click()
-        WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="__xmlview4--rdb7-label-bdi"]'))
-        ).click()
-        driver.find_element(By.XPATH, xpath_btn_consultar).click()
-        time.sleep(12)
+        click_resiliente(driver, By.XPATH, '//*[@id="__xmlview4--rdb4-label-bdi"]', descripcion="radio tránsito 1")
+        click_resiliente(driver, By.XPATH, '//*[@id="__xmlview4--rdb7-label-bdi"]', descripcion="radio tránsito 2")
+        click_resiliente(driver, By.XPATH, xpath_btn_consultar, descripcion="botón consultar (tránsito)")
+        esperar_resultados_tabla(driver, "stock_transito", timeout=40)
         driver.save_screenshot("data/resultado_transito.png")
         registros_transito = extraer_datos_tabla(driver, "stock_transito")
         log(f"Stock en tránsito: {len(registros_transito)} registros")
