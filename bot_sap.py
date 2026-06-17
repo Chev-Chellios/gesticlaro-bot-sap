@@ -27,14 +27,49 @@ except Exception:
 # ──────────────────────────────────────────────
 # CONFIGURACIÓN
 # ──────────────────────────────────────────────
-# Las credenciales se leen de variables de entorno (configuradas como
-# GitHub Secrets: SAP_USER y SAP_PASS). Si no existen, usa estos valores
-# por defecto (recomendado: moverlos a Secrets y borrar de aquí).
-USUARIO = "AGED049128"
-PASSWORD = "Lunes18/"
+# Prioridad de configuración:
+#   1) data/config.json -> escrito automáticamente por el sistema
+#      GestiClaro (módulo "Configuración Sistemas AMX") cada vez que el
+#      usuario cambia usuario/contraseña/rangos ahí.
+#   2) GitHub Secrets (SAP_USER, SAP_PASS, SAP_RANGO_INICIO, SAP_RANGO_FIN)
+#   3) Valores fijos de respaldo (último recurso).
+CONFIG_JSON = os.path.join("data", "config.json")
 
-RANGO_INICIO = os.getenv("SAP_RANGO_INICIO", "")
-RANGO_FIN = os.getenv("SAP_RANGO_FIN", "")
+
+def cargar_config():
+    config = {
+        "sap_usuario": os.getenv("SAP_USER", "AGED049128"),
+        "sap_password": os.getenv("SAP_PASS", "Lunes18/"),
+        "rango_inicio": os.getenv("SAP_RANGO_INICIO", ""),
+        "rango_fin": os.getenv("SAP_RANGO_FIN", ""),
+    }
+    if os.path.exists(CONFIG_JSON):
+        try:
+            with open(CONFIG_JSON, "r", encoding="utf-8") as f:
+                datos = json.load(f)
+            if datos.get("sap_user"):
+                config["sap_usuario"] = datos["sap_user"]
+            if datos.get("sap_pass"):
+                config["sap_password"] = datos["sap_pass"]
+            # Los rangos pueden ser legítimamente vacíos, así que los
+            # tomamos del JSON si la clave existe, sin importar el valor.
+            if "rango_inicio" in datos:
+                config["rango_inicio"] = datos["rango_inicio"]
+            if "rango_fin" in datos:
+                config["rango_fin"] = datos["rango_fin"]
+            print(f"[CONFIG] Cargada desde {CONFIG_JSON} (actualizado: {datos.get('actualizado', '?')})")
+        except Exception as e:
+            print(f"[CONFIG] No se pudo leer {CONFIG_JSON}, se usan valores por defecto/Secrets: {e}")
+    else:
+        print(f"[CONFIG] {CONFIG_JSON} no existe todavía, se usan Secrets/valores por defecto")
+    return config
+
+
+_CFG = cargar_config()
+USUARIO = _CFG["sap_usuario"]
+PASSWORD = _CFG["sap_password"]
+RANGO_INICIO = _CFG["rango_inicio"]
+RANGO_FIN = _CFG["rango_fin"]
 
 URL_HOME = "https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display"
 URL_STOCK = "https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display"
