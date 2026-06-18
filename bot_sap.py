@@ -156,70 +156,90 @@ def esperar_resultados_tabla(driver, nombre_consulta="consulta", timeout=40):
 
 
 def extraer_datos_tabla(driver, nombre_consulta="consulta"):
-    xpath_tabla = (
-        "//table[contains(@class, 'sapUiTableCtrl')]//tbody | "
-        "//table[contains(@class, 'sapMListTbl')]//tbody"
+    # XPath del contenedor real de datos (no los encabezados fijos).
+    # __xmlview4--TabReport-tableCCnt es el div que contiene la tabla
+    # de filas de resultados en el módulo de stock de SAP Fiori Claro.
+    xpath_contenedor = '//*[@id="__xmlview4--TabReport-tableCCnt"]'
+    xpath_tabla_fallback = (
+        "//table[contains(@class, 'sapUiTableCtrl') and not(contains(@class,'sapUiTableColHdrCnt'))]//tbody"
     )
+
     try:
-        tabla_body = WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.XPATH, xpath_tabla))
-        )
+        # Primero intentamos el contenedor específico conocido
+        try:
+            contenedor = driver.find_element(By.XPATH, xpath_contenedor)
+            tabla_body = contenedor.find_element(By.TAG_NAME, "tbody")
+            log(f"  Tabla '{nombre_consulta}': usando contenedor tableCCnt")
+        except Exception:
+            # Fallback: cualquier tbody de tabla SAP que no sea de encabezados
+            tabla_body = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, xpath_tabla_fallback))
+            )
+            log(f"  Tabla '{nombre_consulta}': usando fallback XPath genérico")
+
+        # Guardamos HTML para diagnóstico
+        try:
+            os.makedirs("data", exist_ok=True)
+            html_tabla = tabla_body.get_attribute("outerHTML")
+            with open(f"data/debug_tabla_{nombre_consulta}.html", "w", encoding="utf-8") as f:
+                f.write(html_tabla)
+        except Exception as e:
+            log(f"  No se pudo guardar HTML de depuración: {e}")
+
+        filas = tabla_body.find_elements(By.TAG_NAME, "tr")
+        log(f"  Tabla '{nombre_consulta}': {len(filas)} fila(s) <tr> en el DOM")
+
+        resultados = []
+        filas_descartadas_header = 0
+        filas_descartadas_cortas = 0
+        filas_vacias = 0
+
+        for idx, fila in enumerate(filas):
+            celdas = fila.find_elements(By.TAG_NAME, "td")
+            if not celdas:
+                continue
+            valores = [c.text.strip() for c in celdas]
+
+            if idx < 3:
+                log(f"  Fila[{idx}] ({len(valores)} celdas): {valores}")
+
+            # Ignorar filas completamente vacías (filas "placeholder" de UI5)
+            if not any(valores):
+                filas_vacias += 1
+                continue
+
+            if len(valores) < len(COLUMNAS_SAP):
+                filas_descartadas_cortas += 1
+                continue
+
+            # Descartar fila si sus primeras 3 celdas coinciden con los nombres de columna
+            es_header = all(
+                valores[i].strip().lower() in (
+                    COLUMNAS_SAP[i].lower(),
+                    COLUMNAS_SAP[i].lower().replace("_", " ")
+                )
+                for i in range(min(3, len(COLUMNAS_SAP)))
+            )
+            if es_header:
+                filas_descartadas_header += 1
+                continue
+
+            registro = {
+                COLUMNAS_SAP[i]: valores[i]
+                for i in range(len(COLUMNAS_SAP))
+                if COLUMNAS_SAP[i] in COLUMNAS_RELEVANTES
+            }
+            resultados.append(registro)
+
+        log(f"  '{nombre_consulta}' -> {len(resultados)} registro(s), "
+            f"{filas_descartadas_header} encabezado(s), "
+            f"{filas_vacias} vacía(s), "
+            f"{filas_descartadas_cortas} corta(s)")
+        return resultados
+
     except Exception as e:
-        log(f"Aviso: no se encontró ninguna tabla para '{nombre_consulta}' ({e})")
+        log(f"  Error leyendo tabla '{nombre_consulta}': {e}")
         return []
-
-    # Guardamos el HTML crudo de la tabla para poder diagnosticar a ciegas
-    # si algo vuelve a salir mal (qué filas/columnas existen realmente).
-    try:
-        os.makedirs("data", exist_ok=True)
-        html_tabla = tabla_body.get_attribute("outerHTML")
-        with open(f"data/debug_tabla_{nombre_consulta}.html", "w", encoding="utf-8") as f:
-            f.write(html_tabla)
-    except Exception as e:
-        log(f"  No se pudo guardar el HTML de depuración: {e}")
-
-    filas = tabla_body.find_elements(By.TAG_NAME, "tr")
-    log(f"  Tabla '{nombre_consulta}': {len(filas)} fila(s) <tr> encontradas en el DOM")
-
-    resultados = []
-    filas_descartadas_header = 0
-    filas_descartadas_cortas = 0
-
-    for idx, fila in enumerate(filas):
-        celdas = fila.find_elements(By.TAG_NAME, "td")
-        if not celdas:
-            continue
-        valores = [c.text.strip() for c in celdas]
-
-        # Log crudo de las primeras 3 filas para diagnóstico, siempre.
-        if idx < 3:
-            log(f"  Fila[{idx}] cruda ({len(valores)} celdas): {valores}")
-
-        if len(valores) < len(COLUMNAS_SAP):
-            filas_descartadas_cortas += 1
-            continue
-
-        # Descartar filas de encabezado: si los valores coinciden textualmente
-        # con los nombres de columna esperados (es la fila de títulos, no datos).
-        es_header = all(
-            valores[i].strip().lower() == COLUMNAS_SAP[i].strip().lower().replace("_", " ")
-            or valores[i].strip().lower() == COLUMNAS_SAP[i].strip().lower()
-            for i in range(min(3, len(COLUMNAS_SAP)))
-        )
-        if es_header:
-            filas_descartadas_header += 1
-            continue
-
-        registro = {
-            COLUMNAS_SAP[i]: valores[i]
-            for i in range(len(COLUMNAS_SAP))
-            if COLUMNAS_SAP[i] in COLUMNAS_RELEVANTES
-        }
-        resultados.append(registro)
-
-    log(f"  '{nombre_consulta}' -> {len(resultados)} registro(s) de datos, "
-        f"{filas_descartadas_header} fila(s) de encabezado descartadas, "
-        f"{filas_descartadas_cortas} fila(s) con menos columnas de las esperadas")
     return resultados
 
 
