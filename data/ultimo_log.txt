@@ -1,35 +1,43 @@
-[12:34:06] Abriendo portal SAP Fiori de Claro...
-[12:34:06] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
-[12:36:07] Error/timeout cargando la página (intento 1): ReadTimeoutError: HTTPConnectionPool(host='localhost', port=51467): Read timed out. (read timeout=120)
-[12:37:06] Contenido cargado tras detener: 0 caracteres en <body>
-[12:37:11] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 2/2, timeout=180s)...
-[12:39:12] Error/timeout cargando la página (intento 2): ReadTimeoutError: HTTPConnectionPool(host='localhost', port=51467): Read timed out. (read timeout=120)
-[12:40:11] Contenido cargado tras detener: 0 caracteres en <body>
-[12:40:11] Se alcanzó el máximo de reintentos. Se continúa con lo que haya cargado.
-[12:40:23] Paso 0: Verificando si requiere desplegar login corporativo...
-[12:40:44] El botón superior no respondió. Buscando formulario directamente...
-[12:40:44] Paso 1: Escribiendo credenciales e ingresando...
-[12:40:44] Esperando que el campo j_username esté visible y clickeable...
-[12:41:44] ERROR CRÍTICO: Message: 
-Stacktrace:
-#0 0x5618be24880a <unknown>
-#1 0x5618bdc2b289 <unknown>
-#2 0x5618bdc7f9b4 <unknown>
-#3 0x5618bdc7fc01 <unknown>
-#4 0x5618bdcca874 <unknown>
-#5 0x5618bdcc7a4c <unknown>
-#6 0x5618bdc72f7f <unknown>
-#7 0x5618bdc73d61 <unknown>
-#8 0x5618be20f0f7 <unknown>
-#9 0x5618be20d8bd <unknown>
-#10 0x5618be1f85a6 <unknown>
-#11 0x5618be20e49a <unknown>
-#12 0x5618be1e0560 <unknown>
-#13 0x5618be235288 <unknown>
-#14 0x5618be235425 <unknown>
-#15 0x5618be24738e <unknown>
-#16 0x7f8cc4c9caa4 <unknown>
-#17 0x7f8cc4d29c6c <unknown>
-
-[12:41:44] URL al momento del error: https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display
-[12:41:44] Guardado data/stock_sap.json (0 registros, status=error)
+[17:40:38] Abriendo portal SAP Fiori de Claro...
+[17:40:38] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
+[17:40:53] Paso 0: Verificando si requiere desplegar login corporativo...
+[17:40:53] Botón superior encontrado y presionado.
+[17:40:57] Paso 1: Escribiendo credenciales e ingresando...
+[17:40:57] Esperando que el campo j_username esté visible y clickeable...
+[17:40:57] Campo j_username listo. Esperando 2s adicionales de seguridad...
+[17:40:59] Inyectando usuario...
+[17:40:59]   -> j_username.value = 'AGED049128'
+[17:40:59] Inyectando contraseña...
+[17:40:59]   -> j_password.value longitud = 8
+[17:41:02] Presionando botón de ingreso 'Log On'...
+[17:41:05] Procesando login...
+[17:41:18] Navegando directo al módulo de stock por antigüedad (URL directa)...
+[17:41:18] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
+[17:41:40] Consultando Stock Disponible Principal...
+[17:42:21]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[17:42:21]   Tabla 'stock_principal': usando contenedor tableCCnt
+[17:42:21]   Tabla 'stock_principal': 13 fila(s) <tr> en el DOM
+[17:42:21]   Fila[0] (15 celdas): ['70013455', '352466317792999', 'MOT G15128GXT2521 NJ T', 'N902', 'H105', '', '', 'Nuevo', 'Distribuido', '244002.520', '', '', '', '', '']
+[17:42:21]   Fila[1] (15 celdas): ['70013455', '352466317793039', 'MOT G15128GXT2521 NJ T', 'N902', 'H105', '', '', 'Nuevo', 'Distribuido', '244002.520', '', '', '', '', '']
+[17:42:21]   Fila[2] (15 celdas): ['70013455', '352466317793047', 'MOT G15128GXT2521 NJ T', 'N902', 'H105', '', '', 'Nuevo', 'Distribuido', '244002.520', '', '', '', '', '']
+[17:42:22]   'stock_principal' -> 13 registro(s), 0 encabezado(s), 0 vacía(s), 0 corta(s)
+[17:42:22] Stock principal: 13 registros
+[17:42:22] Consultando Depósito de Reingreso...
+[17:43:07]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[17:43:07]   Tabla 'deposito_reingreso': usando contenedor tableCCnt
+[17:43:07]   Tabla 'deposito_reingreso': 13 fila(s) <tr> en el DOM
+[17:43:07]   Fila[0] (15 celdas): ['70013941', '866865051198397', 'HUA B535-636 BL', 'N902', 'H105', '521', '', 'Nuevo', 'Reing. Cambio NSE/Tra', '63529.410', '318', '', '', '', '']
+[17:43:07]   Fila[1] (15 celdas): ['70015723', '862712088392144', 'HOR X5C 128GB GR', 'N902', 'H105', '521', '', 'Nuevo', 'Reing. Cambio NSE/Tra', '181063.910', '101', '', '', '', '']
+[17:43:07]   Fila[2] (15 celdas): ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+[17:43:08]   'deposito_reingreso' -> 2 registro(s), 0 encabezado(s), 11 vacía(s), 0 corta(s)
+[17:43:08] Stock total acumulado: 15 registros
+[17:43:08] Consultando Stock en Tránsito...
+[17:43:53]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[17:43:53]   Tabla 'stock_transito': usando contenedor tableCCnt
+[17:43:53]   Tabla 'stock_transito': 13 fila(s) <tr> en el DOM
+[17:43:53]   Fila[0] (15 celdas): ['70010671', '358811493291767', 'APP IPH14128GBMID MN', 'N902', 'H105', '641', 'En Transito', 'Nuevo', 'Distribuido', '865340.190', '', '', '', '', '']
+[17:43:54]   Fila[1] (15 celdas): ['70013761', '351493531740829', 'MOT MTE1564GX2523 CZ', 'N902', 'H105', '641', 'En Transito', 'Nuevo', 'Distribuido', '166578.750', '', '', '', '', '']
+[17:43:54]   Fila[2] (15 celdas): ['70013761', '351493531742650', 'MOT MTE1564GX2523 CZ', 'N902', 'H105', '641', 'En Transito', 'Nuevo', 'Distribuido', '166578.750', '', '', '', '', '']
+[17:43:55]   'stock_transito' -> 13 registro(s), 0 encabezado(s), 0 vacía(s), 0 corta(s)
+[17:43:55] Stock en tránsito: 13 registros
+[17:43:55] Guardado data/stock_sap.json (28 registros, status=listo)
