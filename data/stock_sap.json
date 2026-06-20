@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 134 registros",
-  "actualizado": "2026-06-20T10:25:15.152037+00:00",
-  "cantidad": 134,
+  "mensaje": "Sincronización completada: 133 registros",
+  "actualizado": "2026-06-20T17:13:28.479232+00:00",
+  "cantidad": 133,
   "data": [
     {
       "Material": "70013455",
@@ -1255,18 +1255,6 @@
     {
       "Material": "70016451",
       "Serial": "356558700850636",
-      "Texto": "MOT MG67256G621-1 VR T",
-      "Centro": "N902",
-      "Precio": "488005.820",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual"
-    },
-    {
-      "Material": "70016451",
-      "Serial": "356558700852897",
       "Texto": "MOT MG67256G621-1 VR T",
       "Centro": "N902",
       "Precio": "488005.820",
