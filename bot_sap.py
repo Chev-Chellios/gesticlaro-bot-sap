@@ -562,7 +562,8 @@ def main():
         click_resiliente(driver, By.XPATH, xpath_btn_consultar, descripcion="botón consultar (principal)")
         esperar_resultados_tabla(driver, "stock_principal", timeout=40)
         driver.save_screenshot("data/resultado_stock_principal.png")
-        registros_stock_actual.extend(extraer_datos_tabla(driver, "stock_principal"))
+        registros_principal = extraer_datos_tabla(driver, "stock_principal")
+        registros_stock_actual.extend(registros_principal)
         log(f"Stock principal: {len(registros_stock_actual)} registros")
 
         log("Consultando Depósito de Reingreso...")
@@ -573,7 +574,8 @@ def main():
         click_resiliente(driver, By.XPATH, xpath_btn_consultar, descripcion="botón consultar (reingreso)")
         esperar_resultados_tabla(driver, "deposito_reingreso", timeout=40)
         driver.save_screenshot("data/resultado_reingreso.png")
-        registros_stock_actual.extend(extraer_datos_tabla(driver, "deposito_reingreso"))
+        registros_reingreso = extraer_datos_tabla(driver, "deposito_reingreso")
+        registros_stock_actual.extend(registros_reingreso)
         log(f"Stock total acumulado: {len(registros_stock_actual)} registros")
 
         log("Consultando Stock en Tránsito...")
@@ -589,13 +591,20 @@ def main():
         log(f"Stock en tránsito: {len(registros_transito)} registros")
 
         resultado_total = []
-        for r in registros_stock_actual:
+        for r in registros_principal:
             r2 = dict(r)
             r2["Categoria"] = "Stock actual"
+            r2["Origen"] = "principal"
+            resultado_total.append(r2)
+        for r in registros_reingreso:
+            r2 = dict(r)
+            r2["Categoria"] = "Stock actual"
+            r2["Origen"] = "reingreso"
             resultado_total.append(r2)
         for r in registros_transito:
             r2 = dict(r)
             r2["Categoria"] = "Stock en Tránsito"
+            r2["Origen"] = "transito"
             resultado_total.append(r2)
 
         guardar_resultado(resultado_total, "listo", f"Sincronización completada: {len(resultado_total)} registros")
