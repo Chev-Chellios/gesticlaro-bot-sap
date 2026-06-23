@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 116 registros",
-  "actualizado": "2026-06-23T19:31:22.539191+00:00",
-  "cantidad": 116,
+  "mensaje": "Sincronización completada: 109 registros",
+  "actualizado": "2026-06-23T22:48:23.877761+00:00",
+  "cantidad": 109,
   "data": [
     {
       "Material": "70010671",
@@ -111,19 +111,6 @@
     {
       "Material": "70013456",
       "Serial": "352466315331675",
-      "Texto": "MOT G15128GXT2521 GR T",
-      "Centro": "N902",
-      "Precio": "244002.520",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70013456",
-      "Serial": "352466315331782",
       "Texto": "MOT G15128GXT2521 GR T",
       "Centro": "N902",
       "Precio": "244002.520",
@@ -604,19 +591,6 @@
     },
     {
       "Material": "70015194",
-      "Serial": "863508081670976",
-      "Texto": "HOR X7D 256GB NG",
-      "Centro": "N902",
-      "Precio": "362128.550",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70015194",
       "Serial": "863508081670992",
       "Texto": "HOR X7D 256GB NG",
       "Centro": "N902",
@@ -811,19 +785,6 @@
       "Origen": "principal"
     },
     {
-      "Material": "70015355",
-      "Serial": "356841322742377",
-      "Texto": "SMG GXA16128/4165 GR T",
-      "Centro": "N902",
-      "Precio": "322713.260",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
       "Material": "70015356",
       "Serial": "356841321660216",
       "Texto": "SMG GXA16128/4165 VC T",
@@ -865,19 +826,6 @@
     {
       "Material": "70015723",
       "Serial": "862712088717290",
-      "Texto": "HOR X5C 128GB GR",
-      "Centro": "N902",
-      "Precio": "181063.910",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70015723",
-      "Serial": "862712088725194",
       "Texto": "HOR X5C 128GB GR",
       "Centro": "N902",
       "Precio": "181063.910",
@@ -1047,19 +995,6 @@
     {
       "Material": "70016044",
       "Serial": "355973761794006",
-      "Texto": "MOT MG0664GXT35-2 AZ T",
-      "Centro": "N902",
-      "Precio": "204647.150",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016044",
-      "Serial": "355973761799013",
       "Texto": "MOT MG0664GXT35-2 AZ T",
       "Centro": "N902",
       "Precio": "204647.150",
@@ -1345,19 +1280,6 @@
     },
     {
       "Material": "70016453",
-      "Serial": "350296480990415",
-      "Texto": "MOT MTG77256G21-3 NG T",
-      "Centro": "N902",
-      "Precio": "566716.570",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016453",
       "Serial": "350296481172914",
       "Texto": "MOT MTG77256G21-3 NG T",
       "Centro": "N902",
@@ -1385,19 +1307,6 @@
     {
       "Material": "70016478",
       "Serial": "356558700712778",
-      "Texto": "MOT MG67256G621-1 GR T",
-      "Centro": "N902",
-      "Precio": "488005.820",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016478",
-      "Serial": "356558700712810",
       "Texto": "MOT MG67256G621-1 GR T",
       "Centro": "N902",
       "Precio": "488005.820",
