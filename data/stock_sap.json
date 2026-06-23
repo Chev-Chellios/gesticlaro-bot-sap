@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 119 registros",
-  "actualizado": "2026-06-23T11:48:27.798496+00:00",
-  "cantidad": 119,
+  "mensaje": "Sincronización completada: 116 registros",
+  "actualizado": "2026-06-23T19:31:22.539191+00:00",
+  "cantidad": 116,
   "data": [
     {
       "Material": "70010671",
@@ -241,19 +241,6 @@
     {
       "Material": "70013761",
       "Serial": "351493531742809",
-      "Texto": "MOT MTE1564GX2523 CZ",
-      "Centro": "N902",
-      "Precio": "166578.750",
-      "Dias_Antiguedad": "",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70013761",
-      "Serial": "351493531792234",
       "Texto": "MOT MTE1564GX2523 CZ",
       "Centro": "N902",
       "Precio": "166578.750",
@@ -1524,32 +1511,6 @@
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "reingreso"
-    },
-    {
-      "Material": "70016455",
-      "Serial": "356996510725871",
-      "Texto": "MOT E70FU256G05-3 GR T",
-      "Centro": "N902",
-      "Precio": "708395.910",
-      "Dias_Antiguedad": "4",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock en Tránsito",
-      "Origen": "transito"
-    },
-    {
-      "Material": "70016456",
-      "Serial": "356996510824252",
-      "Texto": "MOT E70FU256G05-3 BL T",
-      "Centro": "N902",
-      "Precio": "708395.910",
-      "Dias_Antiguedad": "4",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "",
-      "Nro_Pedido": "",
-      "Categoria": "Stock en Tránsito",
-      "Origen": "transito"
     }
   ]
 }
