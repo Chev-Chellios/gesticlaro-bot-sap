@@ -271,15 +271,53 @@ def scroll_vertical(driver, posicion):
 
 
 def scroll_horizontal(driver, posicion):
-    """Mueve la scrollbar horizontal de la tabla a una posición absoluta (px)."""
+    """
+    Mueve el scroll horizontal de la tabla. SAP UI5 grid table sincroniza
+    varias capas (header, body, scrollbar visual). Scrolleamos directamente
+    el contenedor de filas de datos (tableCCnt) que es el que controla qué
+    columnas son visibles en el DOM, y luego disparamos el evento en el hsb
+    para que SAP sincronice el header con las celdas.
+    """
     try:
         driver.execute_script("""
-            const sb = document.getElementById('__xmlview4--TabReport-hsb');
-            if (sb) { sb.scrollLeft = arguments[0]; sb.dispatchEvent(new Event('scroll', {bubbles:true})); }
+            const pos = arguments[0];
+            // 1. Scrollear el contenedor principal de datos
+            const cnt = document.getElementById('__xmlview4--TabReport-tableCCnt');
+            if (cnt) {
+                cnt.scrollLeft = pos;
+                cnt.dispatchEvent(new Event('scroll', {bubbles: true}));
+            }
+            // 2. Sincronizar la scrollbar visual horizontal (hsb)
+            const hsb = document.getElementById('__xmlview4--TabReport-hsb');
+            if (hsb) {
+                hsb.scrollLeft = pos;
+                hsb.dispatchEvent(new Event('scroll', {bubbles: true}));
+            }
+            // 3. Sincronizar el header de columnas para que coincida
+            const hdr = document.getElementById('__xmlview4--TabReport-sapUiTableColHdrScr');
+            if (hdr) {
+                hdr.scrollLeft = pos;
+            }
         """, posicion)
         return True
-    except Exception:
+    except Exception as e:
+        log(f"  Error en scroll_horizontal({posicion}): {e}")
         return False
+
+
+def obtener_metricas_scroll_horizontal(driver):
+    """
+    Lee el ancho scrolleable del contenedor de datos de la tabla (tableCCnt),
+    que es más confiable que leer el hsb directamente.
+    """
+    try:
+        return driver.execute_script("""
+            const cnt = document.getElementById('__xmlview4--TabReport-tableCCnt');
+            if (!cnt) return null;
+            return [cnt.scrollLeft, cnt.scrollWidth - cnt.clientWidth, cnt.clientWidth];
+        """)
+    except Exception:
+        return None
 
 
 def obtener_metricas_scroll(driver, eje):
@@ -344,7 +382,8 @@ def extraer_datos_tabla(driver, nombre_consulta="consulta", max_pasos_v=60, max_
     except Exception as e:
         log(f"  '{nombre_consulta}': no se pudo bajar scroll de página: {e}")
 
-    metr_h = obtener_metricas_scroll(driver, "hsb")
+    metr_h = obtener_metricas_scroll_horizontal(driver)
+    log(f"  '{nombre_consulta}': métricas hsb (tableCCnt) = {metr_h}")
 
     if not metr_v or metr_v[1] is None:
         log(f"  '{nombre_consulta}': no se detectó scrollbar vertical, se lee una sola vez")
