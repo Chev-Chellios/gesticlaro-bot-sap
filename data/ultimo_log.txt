@@ -1,301 +1,301 @@
-[01:39:50] Abriendo portal SAP Fiori de Claro...
-[01:39:50] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
-[01:40:05] Paso 0: Verificando si requiere desplegar login corporativo...
-[01:40:05] Botón superior encontrado y presionado.
-[01:40:10] Paso 1: Escribiendo credenciales e ingresando...
-[01:40:10] Esperando que el campo j_username esté visible y clickeable...
-[01:40:10] Campo j_username listo. Esperando 2s adicionales de seguridad...
-[01:40:12] Inyectando usuario...
-[01:40:12]   -> j_username.value = 'AGED049128'
-[01:40:12] Inyectando contraseña...
-[01:40:12]   -> j_password.value longitud = 8
-[01:40:15] Presionando botón de ingreso 'Log On'...
-[01:40:18] Procesando login...
-[01:40:31] Navegando directo al módulo de stock por antigüedad (URL directa)...
-[01:40:31] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
-[01:40:53] Consultando Stock Disponible Principal...
-[01:41:34]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[01:41:35]   'stock_principal': scroll de página bajado al fondo para exponer hsb
-[01:41:35]   'stock_principal': métricas hsb (tableCCnt) = [0, 0, 1278]
-[01:41:35]   'stock_principal': scroll vertical max=2838px (paso~429px), horizontal max=0px (paso~1278px)
-[01:41:45]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:00:32] Abriendo portal SAP Fiori de Claro...
+[02:00:32] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
+[02:00:46] Paso 0: Verificando si requiere desplegar login corporativo...
+[02:00:46] Botón superior encontrado y presionado.
+[02:00:50] Paso 1: Escribiendo credenciales e ingresando...
+[02:00:50] Esperando que el campo j_username esté visible y clickeable...
+[02:00:50] Campo j_username listo. Esperando 2s adicionales de seguridad...
+[02:00:53] Inyectando usuario...
+[02:00:53]   -> j_username.value = 'AGED049128'
+[02:00:53] Inyectando contraseña...
+[02:00:53]   -> j_password.value longitud = 8
+[02:00:55] Presionando botón de ingreso 'Log On'...
+[02:00:59] Procesando login...
+[02:01:11] Navegando directo al módulo de stock por antigüedad (URL directa)...
+[02:01:11] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
+[02:01:33] Consultando Stock Disponible Principal...
+[02:02:14]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[02:02:15]   'stock_principal': scroll de página bajado al fondo para exponer hsb
+[02:02:15]   'stock_principal': métricas hsb (tableCCnt) = [0, 0, 1278]
+[02:02:15]   'stock_principal': scroll vertical max=2838px (paso~429px), horizontal max=0px (paso~1278px)
+[02:02:17]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:41:47]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:42:00]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:22]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:42:01]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:42:14]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:27]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:42:16]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:42:28]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:32]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:42:30]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:42:43]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:38]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:42:44]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:42:57]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:43]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:42:59]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:43:11]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:48]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:43:13]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:43:26]   'stock_principal': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:53]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:43:27]   'stock_principal': navegadas 4 columnas a la derecha con teclado
-[01:43:30]   'stock_principal' -> 99 registro(s) únicos por Serial (99 con 6+ campos completos), tras 8 paso(s) verticales
-[01:43:30] Stock principal: 99 registros
-[01:43:30] Consultando Depósito de Reingreso...
-[01:44:14]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[01:44:15]   'deposito_reingreso': scroll de página bajado al fondo para exponer hsb
-[01:44:15]   'deposito_reingreso': métricas hsb (tableCCnt) = [0, 0, 1278]
-[01:44:15]   'deposito_reingreso': scroll vertical max=0px (paso~300px), horizontal max=0px (paso~1278px)
-[01:44:25]   'deposito_reingreso': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:02:56]   'stock_principal' -> 13 registro(s) únicos por Serial (13 con 6+ campos completos), tras 8 paso(s) verticales
+[02:02:56] Stock principal: 13 registros
+[02:02:56] Consultando Depósito de Reingreso...
+[02:03:41]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[02:03:42]   'deposito_reingreso': scroll de página bajado al fondo para exponer hsb
+[02:03:42]   'deposito_reingreso': métricas hsb (tableCCnt) = [0, 0, 1278]
+[02:03:42]   'deposito_reingreso': scroll vertical max=0px (paso~300px), horizontal max=0px (paso~1278px)
+[02:03:43]   'deposito_reingreso': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:44:27]   'deposito_reingreso': navegadas 4 columnas a la derecha con teclado
-[01:44:30]   'deposito_reingreso' -> 2 registro(s) únicos por Serial (2 con 6+ campos completos), tras 1 paso(s) verticales
-[01:44:30] Stock total acumulado: 101 registros
-[01:44:30] Consultando Stock en Tránsito...
-[01:45:14]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[01:45:15]   'stock_transito': scroll de página bajado al fondo para exponer hsb
-[01:45:15]   'stock_transito': métricas hsb (tableCCnt) = [0, 0, 1278]
-[01:45:15]   'stock_transito': scroll vertical max=561px (paso~429px), horizontal max=0px (paso~1278px)
-[01:45:25]   'stock_transito': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:03:47]   'deposito_reingreso' -> 0 registro(s) únicos por Serial (0 con 6+ campos completos), tras 1 paso(s) verticales
+[02:03:47] Stock total acumulado: 13 registros
+[02:03:47] Consultando Stock en Tránsito...
+[02:04:31]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[02:04:32]   'stock_transito': scroll de página bajado al fondo para exponer hsb
+[02:04:32]   'stock_transito': métricas hsb (tableCCnt) = [0, 0, 1278]
+[02:04:32]   'stock_transito': scroll vertical max=561px (paso~429px), horizontal max=0px (paso~1278px)
+[02:04:34]   'stock_transito': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:45:27]   'stock_transito': navegadas 4 columnas a la derecha con teclado
-[01:45:40]   'stock_transito': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:04:39]   'stock_transito': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:45:41]   'stock_transito': navegadas 4 columnas a la derecha con teclado
-[01:45:54]   'stock_transito': no se encontró encabezado 'Precio', intentando por índice: Message: 
+[02:04:44]   'stock_transito': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
 Stacktrace:
-#0 0x56349777a29a <unknown>
-#1 0x56349715c449 <unknown>
-#2 0x5634971b0baf <unknown>
-#3 0x5634971b0e01 <unknown>
-#4 0x5634971fbae4 <unknown>
-#5 0x5634971f8cbf <unknown>
-#6 0x5634971a4132 <unknown>
-#7 0x5634971a4f41 <unknown>
-#8 0x563497740737 <unknown>
-#9 0x56349773ef39 <unknown>
-#10 0x563497729c26 <unknown>
-#11 0x56349773fada <unknown>
-#12 0x563497711bd0 <unknown>
-#13 0x563497766c28 <unknown>
-#14 0x563497766dc5 <unknown>
-#15 0x563497778e1e <unknown>
-#16 0x7f579ac9caa4 <unknown>
-#17 0x7f579ad29c6c <unknown>
+#0 0x55b748a6e3da <unknown>
+#1 0x55b74844fef0 <unknown>
+#2 0x55b7484a5b45 <unknown>
+#3 0x55b748499d62 <unknown>
+#4 0x55b7484996a7 <unknown>
+#5 0x55b7484ecb5c <unknown>
+#6 0x55b748497e4f <unknown>
+#7 0x55b748498c31 <unknown>
+#8 0x55b748a349f7 <unknown>
+#9 0x55b748a33203 <unknown>
+#10 0x55b748a1df16 <unknown>
+#11 0x55b748a33d9a <unknown>
+#12 0x55b748a05eb0 <unknown>
+#13 0x55b748a5ad58 <unknown>
+#14 0x55b748a5aef5 <unknown>
+#15 0x55b748a6cf5e <unknown>
+#16 0x7fc15269caa4 <unknown>
+#17 0x7fc152729c6c <unknown>
 
-[01:45:56]   'stock_transito': navegadas 4 columnas a la derecha con teclado
-[01:45:58]   'stock_transito' -> 30 registro(s) únicos por Serial (30 con 6+ campos completos), tras 3 paso(s) verticales
-[01:45:58] Stock en tránsito: 30 registros
-[01:45:58] Guardado data/stock_sap.json (131 registros, status=listo)
+[02:04:48]   'stock_transito' -> 0 registro(s) únicos por Serial (0 con 6+ campos completos), tras 3 paso(s) verticales
+[02:04:48] Stock en tránsito: 0 registros
+[02:04:48] Guardado data/stock_sap.json (13 registros, status=listo)
