@@ -1,301 +1,61 @@
-[02:00:32] Abriendo portal SAP Fiori de Claro...
-[02:00:32] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
-[02:00:46] Paso 0: Verificando si requiere desplegar login corporativo...
-[02:00:46] Botón superior encontrado y presionado.
-[02:00:50] Paso 1: Escribiendo credenciales e ingresando...
-[02:00:50] Esperando que el campo j_username esté visible y clickeable...
-[02:00:50] Campo j_username listo. Esperando 2s adicionales de seguridad...
-[02:00:53] Inyectando usuario...
-[02:00:53]   -> j_username.value = 'AGED049128'
-[02:00:53] Inyectando contraseña...
-[02:00:53]   -> j_password.value longitud = 8
-[02:00:55] Presionando botón de ingreso 'Log On'...
-[02:00:59] Procesando login...
-[02:01:11] Navegando directo al módulo de stock por antigüedad (URL directa)...
-[02:01:11] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
-[02:01:33] Consultando Stock Disponible Principal...
-[02:02:14]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[02:02:15]   'stock_principal': scroll de página bajado al fondo para exponer hsb
-[02:02:15]   'stock_principal': métricas hsb (tableCCnt) = [0, 0, 1278]
-[02:02:15]   'stock_principal': scroll vertical max=2838px (paso~429px), horizontal max=0px (paso~1278px)
-[02:02:17]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:22]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:27]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:32]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:38]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:43]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:48]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:53]   'stock_principal': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:02:56]   'stock_principal' -> 13 registro(s) únicos por Serial (13 con 6+ campos completos), tras 8 paso(s) verticales
-[02:02:56] Stock principal: 13 registros
-[02:02:56] Consultando Depósito de Reingreso...
-[02:03:41]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[02:03:42]   'deposito_reingreso': scroll de página bajado al fondo para exponer hsb
-[02:03:42]   'deposito_reingreso': métricas hsb (tableCCnt) = [0, 0, 1278]
-[02:03:42]   'deposito_reingreso': scroll vertical max=0px (paso~300px), horizontal max=0px (paso~1278px)
-[02:03:43]   'deposito_reingreso': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:03:47]   'deposito_reingreso' -> 0 registro(s) únicos por Serial (0 con 6+ campos completos), tras 1 paso(s) verticales
-[02:03:47] Stock total acumulado: 13 registros
-[02:03:47] Consultando Stock en Tránsito...
-[02:04:31]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[02:04:32]   'stock_transito': scroll de página bajado al fondo para exponer hsb
-[02:04:32]   'stock_transito': métricas hsb (tableCCnt) = [0, 0, 1278]
-[02:04:32]   'stock_transito': scroll vertical max=561px (paso~429px), horizontal max=0px (paso~1278px)
-[02:04:34]   'stock_transito': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:04:39]   'stock_transito': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:04:44]   'stock_transito': error en navegar_columnas_teclado: ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=149.0.7827.155); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementnotinteractableexception
-Stacktrace:
-#0 0x55b748a6e3da <unknown>
-#1 0x55b74844fef0 <unknown>
-#2 0x55b7484a5b45 <unknown>
-#3 0x55b748499d62 <unknown>
-#4 0x55b7484996a7 <unknown>
-#5 0x55b7484ecb5c <unknown>
-#6 0x55b748497e4f <unknown>
-#7 0x55b748498c31 <unknown>
-#8 0x55b748a349f7 <unknown>
-#9 0x55b748a33203 <unknown>
-#10 0x55b748a1df16 <unknown>
-#11 0x55b748a33d9a <unknown>
-#12 0x55b748a05eb0 <unknown>
-#13 0x55b748a5ad58 <unknown>
-#14 0x55b748a5aef5 <unknown>
-#15 0x55b748a6cf5e <unknown>
-#16 0x7fc15269caa4 <unknown>
-#17 0x7fc152729c6c <unknown>
-
-[02:04:48]   'stock_transito' -> 0 registro(s) únicos por Serial (0 con 6+ campos completos), tras 3 paso(s) verticales
-[02:04:48] Stock en tránsito: 0 registros
-[02:04:48] Guardado data/stock_sap.json (13 registros, status=listo)
+[02:09:15] Abriendo portal SAP Fiori de Claro...
+[02:09:15] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
+[02:09:30] Paso 0: Verificando si requiere desplegar login corporativo...
+[02:09:30] Botón superior encontrado y presionado.
+[02:09:35] Paso 1: Escribiendo credenciales e ingresando...
+[02:09:35] Esperando que el campo j_username esté visible y clickeable...
+[02:09:35] Campo j_username listo. Esperando 2s adicionales de seguridad...
+[02:09:37] Inyectando usuario...
+[02:09:37]   -> j_username.value = 'AGED049128'
+[02:09:37] Inyectando contraseña...
+[02:09:37]   -> j_password.value longitud = 8
+[02:09:40] Presionando botón de ingreso 'Log On'...
+[02:09:43] Procesando login...
+[02:09:56] Navegando directo al módulo de stock por antigüedad (URL directa)...
+[02:09:56] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
+[02:10:18] Consultando Stock Disponible Principal...
+[02:10:59]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[02:11:00]   'stock_principal': scroll de página bajado al fondo para exponer hsb
+[02:11:00]   'stock_principal': métricas hsb (tableCCnt) = [0, 0, 1278]
+[02:11:00]   'stock_principal': scroll vertical max=2838px (paso~429px), horizontal max=0px (paso~1278px)
+[02:11:03]   'stock_principal': click en selall OK
+[02:11:05]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:11:11]   'stock_principal': click en selall OK
+[02:11:14]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:11:20]   'stock_principal': click en selall OK
+[02:11:23]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:11:29]   'stock_principal': click en selall OK
+[02:11:31]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:11:37]   'stock_principal': click en selall OK
+[02:11:40]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:11:46]   'stock_principal': click en selall OK
+[02:11:49]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:11:55]   'stock_principal': click en selall OK
+[02:11:57]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:12:03]   'stock_principal': click en selall OK
+[02:12:06]   'stock_principal': navegadas columnas ocultas con Tab+End+→→→→
+[02:12:09]   'stock_principal' -> 99 registro(s) únicos por Serial (99 con 6+ campos completos), tras 8 paso(s) verticales
+[02:12:09] Stock principal: 99 registros
+[02:12:09] Consultando Depósito de Reingreso...
+[02:12:54]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[02:12:55]   'deposito_reingreso': scroll de página bajado al fondo para exponer hsb
+[02:12:55]   'deposito_reingreso': métricas hsb (tableCCnt) = [0, 0, 1278]
+[02:12:55]   'deposito_reingreso': scroll vertical max=0px (paso~300px), horizontal max=0px (paso~1278px)
+[02:12:57]   'deposito_reingreso': click en selall OK
+[02:13:00]   'deposito_reingreso': navegadas columnas ocultas con Tab+End+→→→→
+[02:13:04]   'deposito_reingreso' -> 0 registro(s) únicos por Serial (0 con 6+ campos completos), tras 1 paso(s) verticales
+[02:13:04] Stock total acumulado: 99 registros
+[02:13:04] Consultando Stock en Tránsito...
+[02:13:48]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[02:13:49]   'stock_transito': scroll de página bajado al fondo para exponer hsb
+[02:13:49]   'stock_transito': métricas hsb (tableCCnt) = [0, 0, 1278]
+[02:13:49]   'stock_transito': scroll vertical max=561px (paso~429px), horizontal max=0px (paso~1278px)
+[02:13:52]   'stock_transito': click en selall OK
+[02:13:55]   'stock_transito': navegadas columnas ocultas con Tab+End+→→→→
+[02:14:01]   'stock_transito': click en selall OK
+[02:14:03]   'stock_transito': navegadas columnas ocultas con Tab+End+→→→→
+[02:14:09]   'stock_transito': click en selall OK
+[02:14:12]   'stock_transito': navegadas columnas ocultas con Tab+End+→→→→
+[02:14:15]   'stock_transito' -> 0 registro(s) únicos por Serial (0 con 6+ campos completos), tras 3 paso(s) verticales
+[02:14:15] Stock en tránsito: 0 registros
+[02:14:15] Guardado data/stock_sap.json (99 registros, status=listo)
