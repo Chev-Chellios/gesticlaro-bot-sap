@@ -260,56 +260,41 @@ def leer_filas_visibles(driver, nombre_consulta):
 
 def navegar_columnas_teclado(driver, nombre_consulta):
     """
-    SAP UI5 grid table no hace overflow horizontal real — las columnas
-    fuera de pantalla no existen en el DOM. Para forzar que SAP las
-    renderice, hacemos click en el encabezado de la última columna
-    visible ("Precio") y presionamos flecha derecha para desplazarnos
-    a las columnas ocultas (Días Antigüedad, Semáforo, Fecha Antigüedad,
-    Nro. Pedido). Cada vez que se desplaza la vista, SAP renderiza las
-    nuevas columnas en el DOM y nosotros las leemos.
+    Hace click en la celda de 'Precio' de la primera fila de datos
+    (la última columna visible) y navega 4 posiciones a la derecha
+    con tecla flecha para que SAP renderice las columnas ocultas.
+    Usa el contenedor tableCCnt para encontrar la primera fila real.
     """
-    # XPath del encabezado de la columna "Precio" (última visible)
-    xpath_precio_header = (
-        "//div[contains(@class,'sapUiTableColHdrCnt')]"
-        "//div[contains(@class,'sapUiTableHeaderDataCell')]"
-        "[.//span[contains(text(),'Precio') or contains(text(),'precio')]]"
-    )
     try:
-        header_precio = WebDriverWait(driver, 8).until(
-            EC.element_to_be_clickable((By.XPATH, xpath_precio_header))
+        # Buscar la primera fila de datos dentro del contenedor conocido
+        xpath_primera_fila = '//*[@id="__xmlview4--TabReport-tableCCnt"]//tbody/tr[1]'
+        primera_fila = WebDriverWait(driver, 8).until(
+            EC.presence_of_element_located((By.XPATH, xpath_primera_fila))
         )
-        header_precio.click()
-        time.sleep(0.4)
-        log(f"  '{nombre_consulta}': click en encabezado 'Precio' OK")
-    except Exception as e:
-        log(f"  '{nombre_consulta}': no se encontró encabezado 'Precio', intentando por índice: {e}")
-        # Fallback: click en la última celda del header visible
-        try:
-            headers = driver.find_elements(
-                By.XPATH,
-                "//div[contains(@class,'sapUiTableColHdrCnt')]"
-                "//div[contains(@class,'sapUiTableHeaderDataCell')]"
-            )
-            if headers:
-                headers[-1].click()
-                time.sleep(0.4)
-                log(f"  '{nombre_consulta}': click en último encabezado visible ({len(headers)} headers)")
-        except Exception as e2:
-            log(f"  '{nombre_consulta}': fallback de header también falló: {e2}")
+        celdas = primera_fila.find_elements(By.TAG_NAME, "td")
+        if not celdas:
+            log(f"  '{nombre_consulta}': no se encontraron celdas en la primera fila")
             return
 
-    # Navegar 4 columnas a la derecha con tecla flecha derecha
-    try:
+        # Click en la última celda visible (columna Precio)
+        ultima_celda = celdas[-1]
+        driver.execute_script("arguments[0].scrollIntoView(true);", ultima_celda)
+        ultima_celda.click()
+        time.sleep(0.5)
+        log(f"  '{nombre_consulta}': click en última celda visible ({len(celdas)} celdas)")
+
+        # Navegar 4 columnas a la derecha
         from selenium.webdriver.common.action_chains import ActionChains
         actions = ActionChains(driver)
-        for i in range(4):
+        for _ in range(4):
             actions.send_keys(Keys.ARROW_RIGHT)
-            actions.pause(0.3)
+            actions.pause(0.35)
         actions.perform()
-        time.sleep(0.5)
+        time.sleep(0.6)
         log(f"  '{nombre_consulta}': navegadas 4 columnas a la derecha con teclado")
+
     except Exception as e:
-        log(f"  '{nombre_consulta}': error navegando con teclado: {e}")
+        log(f"  '{nombre_consulta}': error en navegar_columnas_teclado: {type(e).__name__}: {e}")
 
 
 def scroll_vertical(driver, posicion):
@@ -473,6 +458,7 @@ def extraer_datos_tabla(driver, nombre_consulta="consulta", max_pasos_v=60, max_
         # 4 posiciones a la derecha para que SAP renderice Días Antigüedad,
         # Semáforo, Fecha Antigüedad y Nro. Pedido en el DOM.
         navegar_columnas_teclado(driver, nombre_consulta)
+        time.sleep(0.8)  # esperar que SAP termine de renderizar las nuevas columnas
         for reg in leer_filas_visibles(driver, nombre_consulta):
             serial = reg.get("Serial")
             if not serial:
