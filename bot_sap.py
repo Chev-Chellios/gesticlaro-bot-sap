@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.remote_connection import RemoteConnection
 
 # El cliente HTTP de Selenium (Python -> chromedriver) tiene un timeout fijo
@@ -258,6 +258,60 @@ def leer_filas_visibles(driver, nombre_consulta):
     return parciales
 
 
+def navegar_columnas_teclado(driver, nombre_consulta):
+    """
+    SAP UI5 grid table no hace overflow horizontal real — las columnas
+    fuera de pantalla no existen en el DOM. Para forzar que SAP las
+    renderice, hacemos click en el encabezado de la última columna
+    visible ("Precio") y presionamos flecha derecha para desplazarnos
+    a las columnas ocultas (Días Antigüedad, Semáforo, Fecha Antigüedad,
+    Nro. Pedido). Cada vez que se desplaza la vista, SAP renderiza las
+    nuevas columnas en el DOM y nosotros las leemos.
+    """
+    # XPath del encabezado de la columna "Precio" (última visible)
+    xpath_precio_header = (
+        "//div[contains(@class,'sapUiTableColHdrCnt')]"
+        "//div[contains(@class,'sapUiTableHeaderDataCell')]"
+        "[.//span[contains(text(),'Precio') or contains(text(),'precio')]]"
+    )
+    try:
+        header_precio = WebDriverWait(driver, 8).until(
+            EC.element_to_be_clickable((By.XPATH, xpath_precio_header))
+        )
+        header_precio.click()
+        time.sleep(0.4)
+        log(f"  '{nombre_consulta}': click en encabezado 'Precio' OK")
+    except Exception as e:
+        log(f"  '{nombre_consulta}': no se encontró encabezado 'Precio', intentando por índice: {e}")
+        # Fallback: click en la última celda del header visible
+        try:
+            headers = driver.find_elements(
+                By.XPATH,
+                "//div[contains(@class,'sapUiTableColHdrCnt')]"
+                "//div[contains(@class,'sapUiTableHeaderDataCell')]"
+            )
+            if headers:
+                headers[-1].click()
+                time.sleep(0.4)
+                log(f"  '{nombre_consulta}': click en último encabezado visible ({len(headers)} headers)")
+        except Exception as e2:
+            log(f"  '{nombre_consulta}': fallback de header también falló: {e2}")
+            return
+
+    # Navegar 4 columnas a la derecha con tecla flecha derecha
+    try:
+        from selenium.webdriver.common.action_chains import ActionChains
+        actions = ActionChains(driver)
+        for i in range(4):
+            actions.send_keys(Keys.ARROW_RIGHT)
+            actions.pause(0.3)
+        actions.perform()
+        time.sleep(0.5)
+        log(f"  '{nombre_consulta}': navegadas 4 columnas a la derecha con teclado")
+    except Exception as e:
+        log(f"  '{nombre_consulta}': error navegando con teclado: {e}")
+
+
 def scroll_vertical(driver, posicion):
     """Mueve la scrollbar vertical de la tabla a una posición absoluta (px)."""
     try:
@@ -408,27 +462,35 @@ def extraer_datos_tabla(driver, nombre_consulta="consulta", max_pasos_v=60, max_
         scroll_vertical(driver, pos_v)
         time.sleep(0.6)
 
-        # Recorrido horizontal en esta posición vertical
-        pos_h = 0
-        paso_count_h = 0
-        while True:
-            scroll_horizontal(driver, pos_h)
-            time.sleep(0.5)
+        # Lectura 1: columnas izquierdas visibles (posición natural)
+        for reg in leer_filas_visibles(driver, nombre_consulta):
+            serial = reg.get("Serial")
+            if not serial:
+                continue
+            filas_por_serial.setdefault(serial, {}).update(reg)
 
-            for reg in leer_filas_visibles(driver, nombre_consulta):
-                serial = reg.get("Serial")
-                if not serial:
-                    continue
-                filas_por_serial.setdefault(serial, {}).update(reg)
+        # Lectura 2: columnas derechas ocultas — navegamos con teclado
+        # 4 posiciones a la derecha para que SAP renderice Días Antigüedad,
+        # Semáforo, Fecha Antigüedad y Nro. Pedido en el DOM.
+        navegar_columnas_teclado(driver, nombre_consulta)
+        for reg in leer_filas_visibles(driver, nombre_consulta):
+            serial = reg.get("Serial")
+            if not serial:
+                continue
+            filas_por_serial.setdefault(serial, {}).update(reg)
 
-            if scroll_max_h <= 0 or pos_h >= scroll_max_h or paso_count_h >= max_pasos_h:
-                break
-            pos_h = min(pos_h + paso_h, scroll_max_h)
-            paso_count_h += 1
-
-        # Volver scroll horizontal a 0 antes de seguir bajando (más estable)
-        scroll_horizontal(driver, 0)
-        time.sleep(0.3)
+        # Volver a la posición original (4 flechas izquierda) antes de
+        # seguir con el scroll vertical.
+        try:
+            from selenium.webdriver.common.action_chains import ActionChains
+            actions = ActionChains(driver)
+            for _ in range(4):
+                actions.send_keys(Keys.ARROW_LEFT)
+                actions.pause(0.2)
+            actions.perform()
+            time.sleep(0.3)
+        except Exception:
+            pass
 
         if pos_v >= scroll_max_v or paso_count_v >= max_pasos_v:
             break
@@ -496,7 +558,7 @@ def main():
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--window-size=2560,1440")
 
     driver = webdriver.Chrome(options=chrome_options)
     registros_stock_actual = []
