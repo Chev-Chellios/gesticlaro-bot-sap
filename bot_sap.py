@@ -260,13 +260,12 @@ def leer_filas_visibles(driver, nombre_consulta):
 
 def navegar_columnas_teclado(driver, nombre_consulta):
     """
-    Hace click en el checkbox 'selall' (encabezado de selección) para
-    activar el contexto de teclado de la SAP UI5 grid table, luego
-    navega con Tab para entrar a la primera celda de datos y usa
-    flechas derecha para desplazar la vista a las columnas ocultas.
+    Click en selall (checkbox encabezado de la grid table SAP UI5)
+    y luego 2 veces END para llegar al final de la fila y exponer
+    las 4 columnas ocultas (Dias_Antiguedad, Semaforo,
+    Fecha_Antiguedad, Nro_Pedido). Sin Tab ni ninguna otra tecla.
     """
     try:
-        # Click en el checkbox de selección que activa el contexto de teclado
         selall = WebDriverWait(driver, 8).until(
             EC.presence_of_element_located((By.ID, "__xmlview4--TabReport-selall"))
         )
@@ -274,29 +273,21 @@ def navegar_columnas_teclado(driver, nombre_consulta):
         time.sleep(0.5)
         log(f"  '{nombre_consulta}': click en selall OK")
     except Exception as e:
-        log(f"  '{nombre_consulta}': no se encontró selall: {e}")
+        log(f"  '{nombre_consulta}': no se encontro selall: {e}")
         return
 
-    # Tab para movernos a la primera fila de datos, luego End para ir
-    # a la última columna visible y desde ahí flechas derecha para las ocultas
     try:
         from selenium.webdriver.common.action_chains import ActionChains
         actions = ActionChains(driver)
-        # Tab: pasar de selall al cuerpo de la tabla
-        actions.send_keys(Keys.TAB)
-        actions.pause(0.3)
-        # End: ir a la última celda visible de la fila (columna Precio)
         actions.send_keys(Keys.END)
         actions.pause(0.4)
-        # 4 flechas derecha para renderizar las 4 columnas ocultas
-        for _ in range(4):
-            actions.send_keys(Keys.ARROW_RIGHT)
-            actions.pause(0.35)
+        actions.send_keys(Keys.END)
+        actions.pause(0.4)
         actions.perform()
-        time.sleep(0.7)
-        log(f"  '{nombre_consulta}': navegadas columnas ocultas con Tab+End+→→→→")
+        time.sleep(0.8)
+        log(f"  '{nombre_consulta}': 2x END ejecutados, columnas ocultas expuestas")
     except Exception as e:
-        log(f"  '{nombre_consulta}': error navegando con teclado: {e}")
+        log(f"  '{nombre_consulta}': error enviando END: {e}")
 
 
 def scroll_vertical(driver, posicion):
