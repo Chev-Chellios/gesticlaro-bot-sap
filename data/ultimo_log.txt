@@ -1,63 +1,63 @@
-[10:14:38] Abriendo portal SAP Fiori de Claro...
-[10:14:38] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
-[10:14:53] Paso 0: Verificando si requiere desplegar login corporativo...
-[10:14:53] Botón superior encontrado y presionado.
-[10:14:57] Paso 1: Escribiendo credenciales e ingresando...
-[10:14:57] Esperando que el campo j_username esté visible y clickeable...
-[10:14:58] Campo j_username listo. Esperando 2s adicionales de seguridad...
-[10:15:00] Inyectando usuario...
-[10:15:00]   -> j_username.value = 'AGED049128'
-[10:15:00] Inyectando contraseña...
-[10:15:00]   -> j_password.value longitud = 8
-[10:15:02] Presionando botón de ingreso 'Log On'...
-[10:15:06] Procesando login...
-[10:15:19] Navegando directo al módulo de stock por antigüedad (URL directa)...
-[10:15:19] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
-[10:15:41] Consultando Stock Disponible Principal...
-[10:16:22]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[10:16:23]   'stock_principal': scroll de página bajado al fondo para exponer hsb
-[10:16:23]   'stock_principal': métricas hsb (tableCCnt) = [0, 0, 1278]
-[10:16:23]   'stock_principal': scroll vertical max=2508px (paso~429px), horizontal max=0px (paso~1278px)
-[10:16:25]   'stock_principal': click en hsb OK
-[10:16:29]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:16:35]   'stock_principal': click en hsb OK
-[10:16:39]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:16:44]   'stock_principal': click en hsb OK
-[10:16:48]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:16:54]   'stock_principal': click en hsb OK
-[10:16:57]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:17:03]   'stock_principal': click en hsb OK
-[10:17:07]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:17:13]   'stock_principal': click en hsb OK
-[10:17:17]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:17:23]   'stock_principal': click en hsb OK
-[10:17:26]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
-[10:17:30]   'stock_principal' -> 89 registro(s) únicos por Serial (89 con 6+ campos completos), tras 7 paso(s) verticales
-[10:17:30] Stock principal: 89 registros
-[10:17:30] Consultando Depósito de Reingreso...
-[10:18:14]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[10:18:15]   'deposito_reingreso': scroll de página bajado al fondo para exponer hsb
-[10:18:15]   'deposito_reingreso': métricas hsb (tableCCnt) = [0, 0, 1278]
-[10:18:15]   'deposito_reingreso': scroll vertical max=0px (paso~300px), horizontal max=0px (paso~1278px)
-[10:18:18]   'deposito_reingreso': click en hsb OK
-[10:18:22]   'deposito_reingreso': tecla → mantenida 3s, columnas ocultas expuestas
-[10:18:25]   'deposito_reingreso' -> 2 registro(s) únicos por Serial (2 con 6+ campos completos), tras 1 paso(s) verticales
-[10:18:25] Stock total acumulado: 91 registros
-[10:18:25] Consultando Stock en Tránsito...
-[10:19:10]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
-[10:19:10]   'stock_transito': scroll de página bajado al fondo para exponer hsb
-[10:19:10]   'stock_transito': métricas hsb (tableCCnt) = [0, 0, 1278]
-[10:19:10]   'stock_transito': scroll vertical max=1419px (paso~429px), horizontal max=0px (paso~1278px)
-[10:19:13]   'stock_transito': click en hsb OK
-[10:19:17]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
-[10:19:23]   'stock_transito': click en hsb OK
-[10:19:26]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
-[10:19:32]   'stock_transito': click en hsb OK
-[10:19:36]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
-[10:19:42]   'stock_transito': click en hsb OK
-[10:19:45]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
-[10:19:51]   'stock_transito': click en hsb OK
-[10:19:55]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
-[10:19:58]   'stock_transito' -> 56 registro(s) únicos por Serial (56 con 6+ campos completos), tras 5 paso(s) verticales
-[10:19:58] Stock en tránsito: 56 registros
-[10:19:58] Guardado data/stock_sap.json (147 registros, status=listo)
+[16:41:30] Abriendo portal SAP Fiori de Claro...
+[16:41:30] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#home-Display (intento 1/2, timeout=180s)...
+[16:41:45] Paso 0: Verificando si requiere desplegar login corporativo...
+[16:41:45] Botón superior encontrado y presionado.
+[16:41:50] Paso 1: Escribiendo credenciales e ingresando...
+[16:41:50] Esperando que el campo j_username esté visible y clickeable...
+[16:41:50] Campo j_username listo. Esperando 2s adicionales de seguridad...
+[16:41:52] Inyectando usuario...
+[16:41:52]   -> j_username.value = 'AGED049128'
+[16:41:52] Inyectando contraseña...
+[16:41:52]   -> j_password.value longitud = 8
+[16:41:54] Presionando botón de ingreso 'Log On'...
+[16:41:58] Procesando login...
+[16:42:11] Navegando directo al módulo de stock por antigüedad (URL directa)...
+[16:42:11] Cargando https://flpnwc-d62f4ebf3.dispatcher.us2.hana.ondemand.com/sites/agentes#stock_antiguedad-Display (intento 1/2, timeout=180s)...
+[16:42:33] Consultando Stock Disponible Principal...
+[16:43:14]   'stock_principal': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[16:43:15]   'stock_principal': scroll de página bajado al fondo para exponer hsb
+[16:43:15]   'stock_principal': métricas hsb (tableCCnt) = [0, 0, 1278]
+[16:43:15]   'stock_principal': scroll vertical max=2508px (paso~429px), horizontal max=0px (paso~1278px)
+[16:43:17]   'stock_principal': click en hsb OK
+[16:43:21]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:43:27]   'stock_principal': click en hsb OK
+[16:43:31]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:43:36]   'stock_principal': click en hsb OK
+[16:43:40]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:43:46]   'stock_principal': click en hsb OK
+[16:43:50]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:43:56]   'stock_principal': click en hsb OK
+[16:43:59]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:44:05]   'stock_principal': click en hsb OK
+[16:44:09]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:44:15]   'stock_principal': click en hsb OK
+[16:44:19]   'stock_principal': tecla → mantenida 3s, columnas ocultas expuestas
+[16:44:22]   'stock_principal' -> 89 registro(s) únicos por Serial (89 con 6+ campos completos), tras 7 paso(s) verticales
+[16:44:22] Stock principal: 89 registros
+[16:44:22] Consultando Depósito de Reingreso...
+[16:45:07]   'deposito_reingreso': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[16:45:08]   'deposito_reingreso': scroll de página bajado al fondo para exponer hsb
+[16:45:08]   'deposito_reingreso': métricas hsb (tableCCnt) = [0, 0, 1278]
+[16:45:08]   'deposito_reingreso': scroll vertical max=0px (paso~300px), horizontal max=0px (paso~1278px)
+[16:45:10]   'deposito_reingreso': click en hsb OK
+[16:45:14]   'deposito_reingreso': tecla → mantenida 3s, columnas ocultas expuestas
+[16:45:17]   'deposito_reingreso' -> 2 registro(s) únicos por Serial (2 con 6+ campos completos), tras 1 paso(s) verticales
+[16:45:17] Stock total acumulado: 91 registros
+[16:45:17] Consultando Stock en Tránsito...
+[16:46:02]   'stock_transito': timeout esperando datos (40s), última lectura: 1 fila(s) en el DOM
+[16:46:03]   'stock_transito': scroll de página bajado al fondo para exponer hsb
+[16:46:03]   'stock_transito': métricas hsb (tableCCnt) = [0, 0, 1278]
+[16:46:03]   'stock_transito': scroll vertical max=1419px (paso~429px), horizontal max=0px (paso~1278px)
+[16:46:05]   'stock_transito': click en hsb OK
+[16:46:09]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
+[16:46:14]   'stock_transito': click en hsb OK
+[16:46:18]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
+[16:46:24]   'stock_transito': click en hsb OK
+[16:46:28]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
+[16:46:33]   'stock_transito': click en hsb OK
+[16:46:37]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
+[16:46:43]   'stock_transito': click en hsb OK
+[16:46:47]   'stock_transito': tecla → mantenida 3s, columnas ocultas expuestas
+[16:46:50]   'stock_transito' -> 56 registro(s) únicos por Serial (56 con 6+ campos completos), tras 5 paso(s) verticales
+[16:46:50] Stock en tránsito: 56 registros
+[16:46:50] Guardado data/stock_sap.json (147 registros, status=listo)
