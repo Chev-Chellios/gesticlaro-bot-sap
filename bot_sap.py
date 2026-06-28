@@ -260,34 +260,34 @@ def leer_filas_visibles(driver, nombre_consulta):
 
 def navegar_columnas_teclado(driver, nombre_consulta):
     """
-    Click en selall (checkbox encabezado de la grid table SAP UI5)
-    y luego 2 veces END para llegar al final de la fila y exponer
-    las 4 columnas ocultas (Dias_Antiguedad, Semaforo,
-    Fecha_Antiguedad, Nro_Pedido). Sin Tab ni ninguna otra tecla.
+    Click en la scrollbar horizontal (hsb) y mantiene presionada la
+    tecla direccional derecha por 3 segundos para forzar que SAP UI5
+    renderice las columnas ocultas (Dias_Antiguedad, Semaforo,
+    Fecha_Antiguedad, Nro_Pedido) en el DOM.
     """
     try:
-        selall = WebDriverWait(driver, 8).until(
-            EC.presence_of_element_located((By.ID, "__xmlview4--TabReport-selall"))
+        hsb = WebDriverWait(driver, 8).until(
+            EC.presence_of_element_located((By.ID, "__xmlview4--TabReport-hsb"))
         )
-        driver.execute_script("arguments[0].click();", selall)
-        time.sleep(0.5)
-        log(f"  '{nombre_consulta}': click en selall OK")
+        driver.execute_script("arguments[0].click();", hsb)
+        time.sleep(0.4)
+        log(f"  '{nombre_consulta}': click en hsb OK")
     except Exception as e:
-        log(f"  '{nombre_consulta}': no se encontro selall: {e}")
+        log(f"  '{nombre_consulta}': no se encontro hsb: {e}")
         return
 
     try:
         from selenium.webdriver.common.action_chains import ActionChains
+        # Mantener presionada la tecla → por 3 segundos
         actions = ActionChains(driver)
-        actions.send_keys(Keys.END)
-        actions.pause(0.4)
-        actions.send_keys(Keys.END)
-        actions.pause(0.4)
+        actions.key_down(Keys.ARROW_RIGHT)
+        actions.pause(3.0)
+        actions.key_up(Keys.ARROW_RIGHT)
         actions.perform()
         time.sleep(0.8)
-        log(f"  '{nombre_consulta}': 2x END ejecutados, columnas ocultas expuestas")
+        log(f"  '{nombre_consulta}': tecla → mantenida 3s, columnas ocultas expuestas")
     except Exception as e:
-        log(f"  '{nombre_consulta}': error enviando END: {e}")
+        log(f"  '{nombre_consulta}': error manteniendo tecla: {e}")
 
 
 def scroll_vertical(driver, posicion):
