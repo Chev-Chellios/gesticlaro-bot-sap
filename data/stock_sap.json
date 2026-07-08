@@ -1,7 +1,7 @@
 {
   "status": "error",
-  "mensaje": "Message: \nStacktrace:\n#0 0x55635e22e3da <unknown>\n#1 0x55635dc10139 <unknown>\n#2 0x55635dc64884 <unknown>\n#3 0x55635dc64ad1 <unknown>\n#4 0x55635dcaf974 <unknown>\n#5 0x55635dcacb5c <unknown>\n#6 0x55635dc57e4f <unknown>\n#7 0x55635dc58c31 <unknown>\n#8 0x55635e1f49f7 <unknown>\n#9 0x55635e1f3203 <unknown>\n#10 0x55635e1ddf16 <unknown>\n#11 0x55635e1f3d9a <unknown>\n#12 0x55635e1c5eb0 <unknown>\n#13 0x55635e21ad58 <unknown>\n#14 0x55635e21aef5 <unknown>\n#15 0x55635e22cf5e <unknown>\n#16 0x7fb7fba9caa4 <unknown>\n#17 0x7fb7fbb29c6c <unknown>\n",
-  "actualizado": "2026-07-08T14:20:09.344896+00:00",
+  "mensaje": "Message: \nStacktrace:\n#0 0x557a998d50fa <unknown>\n#1 0x557a992ae939 <unknown>\n#2 0x557a99303f52 <unknown>\n#3 0x557a993041a1 <unknown>\n#4 0x557a9934f124 <unknown>\n#5 0x557a9934c30d <unknown>\n#6 0x557a992f749f <unknown>\n#7 0x557a992f8301 <unknown>\n#8 0x557a9989b167 <unknown>\n#9 0x557a99899948 <unknown>\n#10 0x557a99884dc6 <unknown>\n#11 0x557a9989a50a <unknown>\n#12 0x557a9986ce70 <unknown>\n#13 0x557a998c0c38 <unknown>\n#14 0x557a998c0dd5 <unknown>\n#15 0x557a998d3cae <unknown>\n#16 0x7f4dd129caa4 <unknown>\n#17 0x7f4dd1329c6c <unknown>\n",
+  "actualizado": "2026-07-08T17:41:14.470399+00:00",
   "cantidad": 0,
   "data": []
 }
