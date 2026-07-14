@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 141 registros",
-  "actualizado": "2026-07-13T21:02:50.286437+00:00",
-  "cantidad": 141,
+  "mensaje": "Sincronización completada: 138 registros",
+  "actualizado": "2026-07-14T02:45:31.090076+00:00",
+  "cantidad": 138,
   "data": [
     {
       "Material": "70013455",
@@ -169,19 +169,6 @@
       "Dias_Antiguedad": "94",
       "Semaforo": "",
       "Fecha_Antiguedad": "10.4.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70013941",
-      "Serial": "866865051191657",
-      "Texto": "HUA B535-636 BL",
-      "Centro": "N902",
-      "Precio": "63529.410",
-      "Dias_Antiguedad": "336",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "11.8.2025",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
@@ -1111,19 +1098,6 @@
     },
     {
       "Material": "70016453",
-      "Serial": "350296481172914",
-      "Texto": "MOT MTG77256G21-3 NG T",
-      "Centro": "N902",
-      "Precio": "566716.570",
-      "Dias_Antiguedad": "32",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "11.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016453",
       "Serial": "350296481270676",
       "Texto": "MOT MTG77256G21-3 NG T",
       "Centro": "N902",
@@ -1261,19 +1235,6 @@
       "Dias_Antiguedad": "31",
       "Semaforo": "",
       "Fecha_Antiguedad": "12.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70017061",
-      "Serial": "354229401164576",
-      "Texto": "MOT ED70PR512G-1 BL T",
-      "Centro": "N902",
-      "Precio": "1180660.370",
-      "Dias_Antiguedad": "5",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "8.7.2026",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
