@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 158 registros",
-  "actualizado": "2026-07-17T17:19:01.724732+00:00",
-  "cantidad": 158,
+  "mensaje": "Sincronización completada: 154 registros",
+  "actualizado": "2026-07-17T21:02:26.916407+00:00",
+  "cantidad": 154,
   "data": [
     {
       "Material": "70010671",
@@ -513,19 +513,6 @@
     },
     {
       "Material": "70015354",
-      "Serial": "356841323791126",
-      "Texto": "SMG GXA16128/4165 NG T",
-      "Centro": "N902",
-      "Precio": "322713.260",
-      "Dias_Antiguedad": "7",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "10.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70015354",
       "Serial": "356841323804697",
       "Texto": "SMG GXA16128/4165 NG T",
       "Centro": "N902",
@@ -572,19 +559,6 @@
       "Dias_Antiguedad": "9",
       "Semaforo": "",
       "Fecha_Antiguedad": "8.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70015355",
-      "Serial": "356841323525771",
-      "Texto": "SMG GXA16128/4165 GR T",
-      "Centro": "N902",
-      "Precio": "322713.260",
-      "Dias_Antiguedad": "11",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "6.7.2026",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
@@ -1124,19 +1098,6 @@
     },
     {
       "Material": "70016277",
-      "Serial": "352187612026863",
-      "Texto": "MOT MTG17256G23-1 RS T",
-      "Centro": "N902",
-      "Precio": "322713.260",
-      "Dias_Antiguedad": "7",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "10.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016277",
       "Serial": "352187612068485",
       "Texto": "MOT MTG17256G23-1 RS T",
       "Centro": "N902",
@@ -1391,19 +1352,6 @@
       "Dias_Antiguedad": "21",
       "Semaforo": "",
       "Fecha_Antiguedad": "26.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016456",
-      "Serial": "356996510821498",
-      "Texto": "MOT E70FU256G05-3 BL T",
-      "Centro": "N902",
-      "Precio": "708395.910",
-      "Dias_Antiguedad": "18",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "29.6.2026",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
