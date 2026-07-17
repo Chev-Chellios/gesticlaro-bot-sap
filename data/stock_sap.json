@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 161 registros",
-  "actualizado": "2026-07-17T13:47:20.123261+00:00",
-  "cantidad": 161,
+  "mensaje": "Sincronización completada: 158 registros",
+  "actualizado": "2026-07-17T17:19:01.724732+00:00",
+  "cantidad": 158,
   "data": [
     {
       "Material": "70010671",
@@ -747,19 +747,6 @@
     },
     {
       "Material": "70015725",
-      "Serial": "862712080962498",
-      "Texto": "HOR X5CPLUS256GB UI",
-      "Centro": "N902",
-      "Precio": "253489.770",
-      "Dias_Antiguedad": "44",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "3.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70015725",
       "Serial": "862712081002146",
       "Texto": "HOR X5CPLUS256GB UI",
       "Centro": "N902",
@@ -1202,19 +1189,6 @@
     },
     {
       "Material": "70016449",
-      "Serial": "352187610764044",
-      "Texto": "MOT G17128XT2623 AZ T",
-      "Centro": "N902",
-      "Precio": "283357.890",
-      "Dias_Antiguedad": "35",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "12.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016449",
       "Serial": "352187610775214",
       "Texto": "MOT G17128XT2623 AZ T",
       "Centro": "N902",
@@ -1495,19 +1469,6 @@
       "Dias_Antiguedad": "21",
       "Semaforo": "",
       "Fecha_Antiguedad": "26.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016811",
-      "Serial": "355464680538955",
-      "Texto": "TCL 60R128GT519N SG T",
-      "Centro": "N902",
-      "Precio": "244002.520",
-      "Dias_Antiguedad": "44",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "3.6.2026",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
