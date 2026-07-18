@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 148 registros",
-  "actualizado": "2026-07-18T13:24:40.243204+00:00",
-  "cantidad": 148,
+  "mensaje": "Sincronización completada: 144 registros",
+  "actualizado": "2026-07-18T17:04:09.073707+00:00",
+  "cantidad": 144,
   "data": [
     {
       "Material": "70010671",
@@ -1045,32 +1045,6 @@
       "Origen": "principal"
     },
     {
-      "Material": "70016277",
-      "Serial": "352187612366863",
-      "Texto": "MOT MTG17256G23-1 RS T",
-      "Centro": "N902",
-      "Precio": "322713.260",
-      "Dias_Antiguedad": "8",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "10.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016449",
-      "Serial": "352187610763756",
-      "Texto": "MOT G17128XT2623 AZ T",
-      "Centro": "N902",
-      "Precio": "283357.890",
-      "Dias_Antiguedad": "37",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "11.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
       "Material": "70016449",
       "Serial": "352187610775214",
       "Texto": "MOT G17128XT2623 AZ T",
@@ -1266,19 +1240,6 @@
       "Origen": "principal"
     },
     {
-      "Material": "70016456",
-      "Serial": "356996510817892",
-      "Texto": "MOT E70FU256G05-3 BL T",
-      "Centro": "N902",
-      "Precio": "708395.910",
-      "Dias_Antiguedad": "22",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "26.6.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
       "Material": "70016478",
       "Serial": "356558700776716",
       "Texto": "MOT MG67256G621-1 GR T",
@@ -1359,19 +1320,6 @@
     {
       "Material": "70017063",
       "Serial": "357529750734490",
-      "Texto": "MOT MOTOGMAX256GB CE T",
-      "Centro": "N902",
-      "Precio": "629685.160",
-      "Dias_Antiguedad": "10",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "8.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70017063",
-      "Serial": "357529750734631",
       "Texto": "MOT MOTOGMAX256GB CE T",
       "Centro": "N902",
       "Precio": "629685.160",
