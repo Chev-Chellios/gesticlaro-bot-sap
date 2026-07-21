@@ -1,8 +1,8 @@
 {
   "status": "listo",
-  "mensaje": "Sincronización completada: 157 registros",
-  "actualizado": "2026-07-21T14:01:11.542075+00:00",
-  "cantidad": 157,
+  "mensaje": "Sincronización completada: 155 registros",
+  "actualizado": "2026-07-21T17:27:13.206583+00:00",
+  "cantidad": 155,
   "data": [
     {
       "Material": "70010671",
@@ -124,19 +124,6 @@
     {
       "Material": "70013761",
       "Serial": "351493531801480",
-      "Texto": "MOT MTE1564GX2523 CZ",
-      "Centro": "N902",
-      "Precio": "166578.750",
-      "Dias_Antiguedad": "15",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "6.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70013761",
-      "Serial": "351493531801662",
       "Texto": "MOT MTE1564GX2523 CZ",
       "Centro": "N902",
       "Precio": "166578.750",
@@ -1196,19 +1183,6 @@
       "Dias_Antiguedad": "15",
       "Semaforo": "",
       "Fecha_Antiguedad": "6.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016453",
-      "Serial": "350296481222610",
-      "Texto": "MOT MTG77256G21-3 NG T",
-      "Centro": "N902",
-      "Precio": "566716.570",
-      "Dias_Antiguedad": "5",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "16.7.2026",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
