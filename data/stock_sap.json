@@ -1,7 +1,7 @@
 {
   "status": "listo",
   "mensaje": "Sincronización completada: 147 registros",
-  "actualizado": "2026-07-22T17:26:37.221026+00:00",
+  "actualizado": "2026-07-22T21:15:16.115337+00:00",
   "cantidad": 147,
   "data": [
     {
@@ -845,19 +845,6 @@
       "Dias_Antiguedad": "6",
       "Semaforo": "",
       "Fecha_Antiguedad": "16.7.2026",
-      "Nro_Pedido": "",
-      "Categoria": "Stock actual",
-      "Origen": "principal"
-    },
-    {
-      "Material": "70016044",
-      "Serial": "355973761781391",
-      "Texto": "MOT MG0664GXT35-2 AZ T",
-      "Centro": "N902",
-      "Precio": "204647.150",
-      "Dias_Antiguedad": "20",
-      "Semaforo": "",
-      "Fecha_Antiguedad": "2.7.2026",
       "Nro_Pedido": "",
       "Categoria": "Stock actual",
       "Origen": "principal"
@@ -1847,6 +1834,19 @@
       "Semaforo": "",
       "Fecha_Antiguedad": "20.7.2026",
       "Nro_Pedido": "4210280990",
+      "Categoria": "Stock en Tránsito",
+      "Origen": "transito"
+    },
+    {
+      "Material": "70016598",
+      "Serial": "350149310056677",
+      "Texto": "SMG GS26U256GS948 VT T",
+      "Centro": "N902",
+      "Precio": "2754875.240",
+      "Dias_Antiguedad": "0",
+      "Semaforo": "",
+      "Fecha_Antiguedad": "22.7.2026",
+      "Nro_Pedido": "4210289572",
       "Categoria": "Stock en Tránsito",
       "Origen": "transito"
     },
